@@ -1,3 +1,5 @@
+package logic;
+
 // The point of entry for the PASTA application
 // This is basically the driver
 public class Pasta

@@ -1,3 +1,5 @@
+package logic;
+
 /*
 * Cole Grigsby 
 */ 
