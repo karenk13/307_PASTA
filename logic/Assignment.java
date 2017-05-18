@@ -16,35 +16,20 @@ public class Assignment
    private boolean activeAssignment;
    private long timeSpentOnAssignment;
    private long estimatedTime;
-
    private long startWorkAssignmentTime;
    
-   
    // Constructors
-   public Assignment(Date due)
+   public Assignment(String name, Date due, long estTime, String desc)
    {
       createDate = Calendar.getInstance();
       dueDate = Calendar.getInstance();
-      dueDate.set(due.getYear(), due.getMonth(), due.getDay(), due.getMinute(), due.getSecond());
+      dueDate.set(due.getYear(), due.getMonth(), due.getDay(),due.getHour(), due.getMinute(), due.getSecond());
       dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-      System.out.println(dateFormat.format(createDate.getTime()));
-      System.out.println(dateFormat.format(dueDate.getTime()));
-      System.out.println("Days till due: " + daysTillDue());
-      System.out.println("Hours till due: " + hoursTillDue());
-      System.out.println("Minutes till due: " + minutesTillDue());
-      System.out.println("Seconds till due: " + secondsTillDue());
-      System.out.println(timeTillDue());
       complete = false;
       activeAssignment = false;
       timeSpentOnAssignment = 0;
-   }
-
-   public Assignment(String name, Calendar due)
-   {
-      this.name = name;
-      createDate = Calendar.getInstance();
-      dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-      System.out.println(dateFormat.format(createDate));
+      estimatedTime = estTime;
+      description = desc;
    }
 
    // Accessor Methods
@@ -162,14 +147,10 @@ public class Assignment
 
    private String timeTillDue()
    {
-      long days = 0;
-      long hours = 0;
-      long minutes = 0;
-      long seconds = 0;
-      days = daysTillDue();
-      hours = hoursTillDue();
-      minutes = minutesTillDue();
-      seconds = secondsTillDue();
+      long days = daysTillDue();
+      long hours = hoursTillDue();
+      long minutes = minutesTillDue();
+      long seconds = secondsTillDue();
       return "Days: " + days + " Hours: " + hours + " Minutes: " + minutes + " Seconds: " + seconds;
    }
    

@@ -16,12 +16,12 @@ public class Date
    // Second: Expects between 0-59
    public Date(int year, int month, int day, int hour, int minute, int second)
    {
-      this.year = year;
-      this.month = month;
-      this.day = day;
-      this.hour = hour;
-      this.minute = minute;
-      this.second = second;
+      setYear(year);
+      setMonth(month);
+      setDay(day);
+      setHour(hour);
+      setMinute(minute);
+      setSecond(second);
    }
    
    public int getYear()
@@ -56,31 +56,73 @@ public class Date
 
    public void setYear(int newYear)
    {
-      this.year = newYear;
+      if(newYear > 0)
+      {
+         this.year = newYear;
+      }
+      else
+      {
+         throw new IllegalArgumentException("The year cannot be negative");
+      }
    }
 
    public void setMonth(int newMonth)
    {
-      this.month = newMonth;
+      if(newMonth > -1 && newMonth < 12)
+      {
+         this.month = newMonth;
+      }
+      else
+      {
+         throw new IllegalArgumentException("The month cannot be negative and must be less than 12");
+      }
    }
 
    public void setDay(int newDay)
    {
-      this.month = newDay;
+      if(newDay > -1 && newDay < 32)
+      {
+         this.month = newDay;
+      }
+      else
+      {
+         throw new IllegalArgumentException("The day cannot be negative and must be less than 32");
+      }
    }
 
    public void setHour(int newHour)
    {
-      this.hour = newHour;
+      if(hour > -1 && hour < 24)
+      {
+         this.hour = newHour;
+      }
+      else
+      {
+         throw new IllegalArgumentException("The hour cannot be negative and must be less than 24");
+      }
    }
 
    public void setMinute(int newMinute)
    {
-      this.minute = newMinute;
+      if(newMinute > -1 && newMinute < 60)
+      {
+         this.minute = newMinute;
+      }
+      else
+      {
+         throw new IllegalArgumentException("The minute cannot be negative and must be less than 60");
+      }
    }
 
    public void setSecond(int newSecond)
    {
-      this.second = newSecond;
+      if(newSecond > -1 && newSecond < 60)
+      {
+         this.second = newSecond;
+      }
+      else
+      {
+         throw new IllegalArgumentException("The second cannot be negative and must be less than 60");
+      }
    }
 }

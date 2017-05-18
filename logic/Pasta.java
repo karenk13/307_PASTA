@@ -6,9 +6,12 @@ public class Pasta
 {
    public static void main(String[] args)
    {
-      Assignment assignment = new Assignment(new Date(2017,04,26,15,45,30));
+      Date date = new Date(2017,04,26,15,45,30);
+      String name = "Essay";
+      long estTime = 10000;
+      String desc = "CPE 300 Assignment 2";
+      Assignment assignment = new Assignment(name, date, estTime, desc);
       assignment.workOnAssignment();
       assignment.pauseWorkOnAssignment();
-      System.out.println("Time Spent: " + assignment.timeSpentOnAssignment());
    }
 }
