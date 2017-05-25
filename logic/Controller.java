@@ -1,4 +1,4 @@
-package pasta;
+package logic;
 
 public class Controller {
 }

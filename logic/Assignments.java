@@ -1,4 +1,4 @@
-package pasta;
+package logic;
 
 /**
  * Created by devin on 5/17/17.

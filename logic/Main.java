@@ -1,4 +1,4 @@
-package pasta;
+package logic;
 
 import javafx.application.Application;
 import javafx.collections.ObservableList;
