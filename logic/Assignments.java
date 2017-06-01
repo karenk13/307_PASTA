@@ -1,5 +1,7 @@
 package logic;
 
+//TODO remove this class 
+
 /**
  * Created by devin on 5/17/17.
  */

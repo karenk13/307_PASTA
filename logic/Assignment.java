@@ -9,6 +9,7 @@ public class Assignment
    private String name;
    private String description;
    private String category;
+   private Class classFor; 
    private Calendar dueDate;
    private Calendar createDate;
    private DateFormat dateFormat;
@@ -22,6 +23,7 @@ public class Assignment
    public Assignment(String name, Date due, long estTime, String desc)
    {
       createDate = Calendar.getInstance();
+      classFor= new Class(); 
       dueDate = Calendar.getInstance();
       dueDate.set(due.getYear(), due.getMonth(), due.getDay(),due.getHour(), due.getMinute(), due.getSecond());
       dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");

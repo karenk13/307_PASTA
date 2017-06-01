@@ -3,6 +3,8 @@ import javafx.geometry.Pos;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import javafx.application.Application;
 import javafx.collections.ObservableList;
@@ -12,7 +14,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
+//import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -183,30 +186,42 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         createUser = new Scene(newUse, screenSize.getWidth(), screenSize.getHeight());
     }
     
-    private static void addAssignmentScreen()
+    private static void addAssignmentScreen(){
+    	addAssignmentScreen(null);
+    }
+    
+    protected static void addAssignmentScreen(LocalDate due)
     {
     	VBox newBox = new VBox();
-    	double boxWidth = 200;
+    	/*double boxWidth = 200;
     	double height = screenSize.getHeight();
     	double width = screenSize.getWidth();
-    	
+    	*/
     	// Sign Up Input
+    	Label titleLabel = new Label("Assignment Title");
         TextField assignTitle = new TextField("Assignment Title");
         assignTitle.setMaxWidth(Double.MAX_VALUE);
         
+    	Label descLabel = new Label("Description");
+
         TextField description = new TextField("Description");
         description.setMaxWidth(Double.MAX_VALUE);
 
-        TextField dueDate = new TextField("Due Date (mm/dd/yyyy)");
-        dueDate.setMaxWidth(Double.MAX_VALUE);
+    	Label dueLabel = new Label("Due Date");
+    	DatePicker dueDate = new DatePicker(); 
+    	if(due != null)
+    		dueDate.setValue(due);
+    	else 
+    		dueDate.setValue(LocalDate.now());
 
+    	Label priorityLabel = new Label("Priority (1-10)");
         TextField priority = new TextField("Priority Rating");
         priority.setMaxWidth(Double.MAX_VALUE);
 
         Button createButton = new Button("Create Assignment");
         createButton.setMaxWidth(Double.MAX_VALUE);
         createButton.setOnAction(e -> createAssignment(assignTitle.getText(),
-        		description.getText(),dueDate.getText(), Integer.parseInt(priority.getText())));
+        		description.getText(), dueDate.getValue().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")), Integer.parseInt(priority.getText())));
         
         cancelButton = new Button("Cancel");
         cancelButton.setMaxWidth(Double.MAX_VALUE);
@@ -218,7 +233,8 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         header.setAlignment(Pos.CENTER);
         
         newBox.setSpacing(10);
-        newBox.getChildren().addAll(header, assignTitle, description, dueDate, priority);
+        newBox.getChildren().addAll(header, titleLabel, assignTitle, descLabel, description, 
+        		dueLabel, dueDate, priorityLabel, priority);
         newBox.getChildren().addAll(createButton, cancelButton);
         
         
@@ -233,13 +249,17 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     
     private static void calendarScreen()
     {
+    	CalendarView calendarView = new CalendarView() ;
+	
     	VBox navBar = navBarButtons();
     	// Calendar Page Setup
         GridPane calendarGrid = new GridPane();
         calendarGrid.setPadding(new Insets(0,0,0,0));
         calendarGrid.setVgap(8);
         calendarGrid.setHgap(10);
-        calendarGrid.getChildren().addAll(navBar);
+		
+		BorderPane root = new BorderPane(calendarView.getView(), null, null, null, navBar);
+        calendarGrid.getChildren().addAll(root);
         calendar = new Scene(calendarGrid, screenSize.getWidth(), screenSize.getHeight());
         
     }
