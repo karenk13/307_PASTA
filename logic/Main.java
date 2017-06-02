@@ -32,6 +32,10 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     static Button assignmentButton, calendarButton, scratchpadButton, settingsButton, exitButton;
     static Scene login, home, createUser, addAssignment, calendar, scratchpad, settings;
     static ObservableList<Assignments> assignments;
+    
+    private static User user; 
+    private static AssignmentManager AM; 
+    
     @Override
     public void start(Stage primaryStage) throws Exception{
         window = primaryStage;
@@ -39,9 +43,13 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         assignments = FXCollections.observableArrayList();
         getAssignments();
                         
+        
+        //TODO get AM from the user that signs in 
+        user = new User("Test", "dummy");
+        AM = user.getAM(); 
 
         // Assignment View
-        TableColumn<Assignments, String> nameCol = new TableColumn<>("Assignment");
+        /*TableColumn<Assignments, String> nameCol = new TableColumn<>("Assignment");
         nameCol.setMinWidth(200);
         nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
 
@@ -53,9 +61,9 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         priorityCol.setMinWidth(200);
         priorityCol.setCellValueFactory(new PropertyValueFactory<>("priority"));
 
-        assignment = new TableView<>();
+        assignment = new TableView<Assignments>();
         assignment.setItems(assignments);
-        assignment.getColumns().addAll(nameCol, dueDateCol, priorityCol);
+        assignment.getColumns().addAll(nameCol, dueDateCol, priorityCol);*/
         
 
         // Initialize Scenes
@@ -75,14 +83,20 @@ public class Main extends Application implements EventHandler<ActionEvent>{
 
     }
     
-    private void currentAssignments()
+    private static void currentAssignments()
     {
     	 TableColumn<Assignments, String> col1 = new TableColumn<>("Current Assignments");
          TableColumn<Assignments, String> col2 = new TableColumn<>("Statistics");
          col1.setMinWidth(screenSize.getWidth()/2-100);
          col1.setCellValueFactory(new PropertyValueFactory<>("name"));
          col2.setMinWidth(screenSize.getWidth()/2-100);
-         assignmentManager = new TableView();
+         
+         
+         for (Assignment a: AM.getAssignments()){
+        	 System.out.println(a.name());
+         }
+         
+         assignmentManager = new TableView<Assignments>();
          assignmentManager.setMinHeight(screenSize.getHeight()-50);
          assignmentManager.setItems(assignments);
          assignmentManager.getColumns().addAll(col1);
@@ -140,6 +154,9 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     
     private static void newUser()
     {
+    	//TODO create new user instance and set up AM 
+    	
+    	
     	VBox newUserBox = new VBox();
     	double boxWidth = 200;
     	double height = screenSize.getHeight();
@@ -249,7 +266,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     
     private static void calendarScreen()
     {
-    	CalendarView calendarView = new CalendarView() ;
+    	CalendarView calendarView = new CalendarView(AM) ;
 	
     	VBox navBar = navBarButtons();
     	// Calendar Page Setup
@@ -378,8 +395,9 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     
     private static void createAssignment(String nam, String des, String due, int priority)
     {
-    	Assignments addOne = new Assignments(nam,due,priority);
-    	assignments.add(addOne);
+    	AM.addAssignment(nam,des,due,priority);
+    	currentAssignments();
+    	addAssignmentScreen();
     	window.setScene(home);
     }
     private static void logout(Scene login)
@@ -388,7 +406,8 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     }
     private static void goToHome(Scene home)
     {
-    	TableView<Assignments> assignment;
+    	//TableView<Assignments> assignment;
+    	currentAssignments();
     	window.setScene(home);
     	
     }

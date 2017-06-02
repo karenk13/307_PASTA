@@ -4,13 +4,14 @@ import java.util.concurrent.TimeUnit;
 import java.util.Calendar;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 public class Assignment
 {
    private String name;
    private String description;
    private String category;
    private Class classFor; 
-   private Calendar dueDate;
+   private LocalDate dueDate;
    private Calendar createDate;
    private DateFormat dateFormat;
    private boolean complete;
@@ -18,20 +19,30 @@ public class Assignment
    private long timeSpentOnAssignment;
    private long estimatedTime;
    private long startWorkAssignmentTime;
+   private int priority; 
    
    // Constructors
-   public Assignment(String name, Date due, long estTime, String desc)
+   public Assignment(String name, LocalDate due, long estTime, String desc)
    {
       createDate = Calendar.getInstance();
       classFor= new Class(); 
-      dueDate = Calendar.getInstance();
-      dueDate.set(due.getYear(), due.getMonth(), due.getDay(),due.getHour(), due.getMinute(), due.getSecond());
+      dueDate=due; 
+      // dueDate = Calendar.getInstance();
+      //dueDate.set(due.getYear(), due.getMonth(), due.getDay(),due.getHour(), due.getMinute(), due.getSecond());
       dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
       complete = false;
       activeAssignment = false;
       timeSpentOnAssignment = 0;
       estimatedTime = estTime;
       description = desc;
+   }
+   
+   public Assignment(String n, String d, LocalDate du, int p){
+	   name=n;
+	   description=d; 
+	   dueDate=du;
+	   priority=p; 
+	   
    }
 
    // Accessor Methods
@@ -59,6 +70,9 @@ public class Assignment
    {
       return complete;
    }
+   public LocalDate dueDate(){
+	   return dueDate;
+   }
    
    public long timeSpentOnAssignment()
    {
@@ -82,7 +96,7 @@ public class Assignment
       category = newCategory;
    }
 
-   public void editDueDate(Calendar newDueDate)
+   public void editDueDate(LocalDate newDueDate)
    {
       dueDate = newDueDate;
    }
@@ -93,13 +107,13 @@ public class Assignment
    }
    // End Modifier Methods
 
-   private Calendar dateToCalendar(Date date)
+  /* private Calendar dateToCalendar(Date date)
    {
       dueDate.set(2018,10,16, 23, 56);
       Calendar cal = Calendar.getInstance();
       cal.set(date.getYear(), date.getMonth(), date.getDay(), date.getHour(), date.getMinute(), date.getSecond());
       return cal;
-   }
+   }*/
    
    public void workOnAssignment()
    {
@@ -115,11 +129,11 @@ public class Assignment
       timeSpentOnAssignment += Math.abs(startWorkAssignmentTime - cal.getTimeInMillis());
    }
 
-   private long daysTillDue()
+   /*private long daysTillDue()
    {
       Calendar currentDate = Calendar.getInstance();
       long current = currentDate.getTimeInMillis();
-      long due = dueDate.getTimeInMillis();
+      long due = dueDate.getSecond()*1000;
       return TimeUnit.MILLISECONDS.toDays(Math.abs(due - current));
    }
 
@@ -127,7 +141,7 @@ public class Assignment
    {
       Calendar currentDate = Calendar.getInstance();
       long current = currentDate.getTimeInMillis();
-      long due = dueDate.getTimeInMillis();
+      long due = dueDate.getSecond()*1000;
       return TimeUnit.MILLISECONDS.toHours(Math.abs(due - current)) % 24;
    }
 
@@ -135,7 +149,7 @@ public class Assignment
    {
       Calendar currentDate = Calendar.getInstance();
       long current = currentDate.getTimeInMillis();
-      long due = dueDate.getTimeInMillis();
+      long due = dueDate.getSecond()*1000;
       return TimeUnit.MILLISECONDS.toMinutes(Math.abs(due - current)) % 60;
    }
 
@@ -143,7 +157,7 @@ public class Assignment
    {
       Calendar currentDate = Calendar.getInstance();
       long current = currentDate.getTimeInMillis();
-      long due = dueDate.getTimeInMillis();
+      long due = dueDate. .getSecond()*1000;
       return TimeUnit.MILLISECONDS.toSeconds(Math.abs(due - current)) % 60;
    }
 
@@ -154,7 +168,7 @@ public class Assignment
       long minutes = minutesTillDue();
       long seconds = secondsTillDue();
       return "Days: " + days + " Hours: " + hours + " Minutes: " + minutes + " Seconds: " + seconds;
-   }
+   }*/
    
    
    public String toString()
