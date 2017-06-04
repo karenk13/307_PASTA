@@ -1,24 +1,23 @@
 package logic;
 
-import java.util.concurrent.TimeUnit;
 import java.util.Calendar;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+//import java.text.DateFormat;
+//import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-public class Assignment implements Comparable
+public class Assignment implements Comparable<Assignment>
 {
    private String name;
    private String description;
    private String category;
-   private Class classFor; 
+   //private Class classFor; 
    private LocalDate dueDate;
    private Calendar createDate;
-   private DateFormat dateFormat;
+   //private DateFormat dateFormat;
    private boolean complete;
    private boolean activeAssignment;
    private long timeSpentOnAssignment;
-   private long estimatedTime;
+   //private long estimatedTime;
    private long startWorkAssignmentTime;
    private double priority; 
    
@@ -26,15 +25,15 @@ public class Assignment implements Comparable
    public Assignment(String name, LocalDate due, long estTime, String desc)
    {
       createDate = Calendar.getInstance();
-      classFor= new Class(); 
+     // classFor= new Class(); 
       dueDate=due; 
       // dueDate = Calendar.getInstance();
       //dueDate.set(due.getYear(), due.getMonth(), due.getDay(),due.getHour(), due.getMinute(), due.getSecond());
-      dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+     // dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
       complete = false;
       activeAssignment = false;
       timeSpentOnAssignment = 0;
-      estimatedTime = estTime;
+      //estimatedTime = estTime;
       description = desc;
    }
    
@@ -55,9 +54,8 @@ public class Assignment implements Comparable
    }
    
    @Override
-   public int compareTo(Object o) 
+   public int compareTo(Assignment a) 
    {
-	   Assignment a = (Assignment)o;
 	   if(a.priority > priority)
 	   {
 		   return 1;
@@ -208,6 +206,7 @@ public class Assignment implements Comparable
    {
       return createDate.toString();
    }
+
 
 
 

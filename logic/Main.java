@@ -8,7 +8,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
 import javafx.scene.Scene;
@@ -23,7 +22,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.geometry.Insets;
-import javafx.geometry.Orientation;
 
 public class Main extends Application implements EventHandler<ActionEvent>{
 
@@ -211,7 +209,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     protected static void addAssignmentScreen(LocalDate due)
     {
     	VBox newBox = new VBox();
-    	VBox navBar = navBarButtons();
+    	//VBox navBar = navBarButtons();
     	
     	// Assignment Detail Input
     	Label titleLabel = new Label("Assignment Title");
@@ -270,7 +268,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         GridPane addAssign = new GridPane();
         addAssign.setVgap(8);
         addAssign.setHgap(10);
-        addAssign.getChildren().addAll(newBox, navBar);
+        addAssign.getChildren().addAll(newBox);
     	addAssignment = new Scene(addAssign, screenSize.getWidth(), screenSize.getHeight());
     }
     
