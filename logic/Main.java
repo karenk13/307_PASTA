@@ -15,7 +15,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseButton;
 //import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -28,54 +27,27 @@ import javafx.geometry.Orientation;
 public class Main extends Application implements EventHandler<ActionEvent>{
 
     static Stage window;
-    //static TableView<Assignment> assignment;
-    static TableView<Assignment> assignmentTable;
+    static TableView<Assignment> assignmentManager;
     static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     
     static Button loginButton, signUpButton, createSignUpButton, cancelButton, logoutButton, homeButton;
     static Button assignmentButton, calendarButton, scratchpadButton, settingsButton, exitButton;
-    static Scene login, home, createUser, addAssignment, calendar, scratchpad, settings;
-    static ObservableList<Assignment> assignments;
-    
+    static Scene login, home, createUser, addAssignment, calendar, scratchpad, settings, viewAssignment;
+    static Scene editAssignment, previousScene;
+    static Scene currentScene;
+   
     private static User user; 
     private static AssignmentManager AM; 
-    
     
     @Override
     public void start(Stage primaryStage) throws Exception{
         window = primaryStage;
         window.setTitle("PASTA");
-       // assignments = FXCollections.observableArrayList();
-        
-                        
-        
+         
         //TODO get AM from the user that signs in 
         user = new User("Test", "dummy");
         AM = user.getAM(); 
-        assignments = FXCollections.observableArrayList(AM.getAssignments());
-
         
-
-
-        
-        // Assignment View
-        /*TableColumn<Assignments, String> nameCol = new TableColumn<>("Assignment");
-        nameCol.setMinWidth(200);
-        nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-
-        TableColumn<Assignments, String> dueDateCol = new TableColumn<>("Due Date");
-        dueDateCol.setMinWidth(200);
-        dueDateCol.setCellValueFactory(new PropertyValueFactory<>("dueDate"));
-
-        TableColumn<Assignments, Integer> priorityCol = new TableColumn<>("Priority");
-        priorityCol.setMinWidth(200);
-        priorityCol.setCellValueFactory(new PropertyValueFactory<>("priority"));
-
-        assignment = new TableView<Assignments>();
-        assignment.setItems(assignments);
-        assignment.getColumns().addAll(nameCol, dueDateCol, priorityCol);*/
-        
-
         // Initialize Scenes
         loginScreen();
         currentAssignments();
@@ -95,45 +67,27 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     
     private static void currentAssignments()
     {
-    	 TableColumn<Assignment, String> assignCol = new TableColumn<>("Current Assignments");
-    	 TableColumn<Assignment, String> nameCol = new TableColumn<> ("Name");
-    	 TableColumn<Assignment, String> dueCol = new TableColumn<> ("Due");
-    	 TableColumn<Assignment, Double> pCol = new TableColumn<>("Priority");
-    	 
-         TableColumn<Assignment, String> col2 = new TableColumn<Assignment, String>("Statistics");
+    	 TableColumn<Assignment, String> assignCol = new TableColumn<>("Current Assignments"); 	 
          assignCol.setMinWidth(screenSize.getWidth()/2-100);
+         
+         TableColumn<Assignment, String> nameCol = new TableColumn<> ("Name");
          nameCol.setCellValueFactory(new PropertyValueFactory<Assignment, String>("name"));
          nameCol.setMinWidth(200);
+         
+         TableColumn<Assignment, String> dueCol = new TableColumn<> ("Due");
          dueCol.setCellValueFactory(new PropertyValueFactory<Assignment, String>("due"));
          dueCol.setMinWidth(200);
+         
+         TableColumn<Assignment, Double> pCol = new TableColumn ("Priority");
          pCol.setCellValueFactory(new PropertyValueFactory<Assignment, Double>("priority"));
          pCol.setMinWidth(200);
-         col2.setMinWidth(screenSize.getWidth()/2-100);
-         
+        
          assignCol.getColumns().addAll(nameCol, dueCol, pCol);
         
-         
-         
-         assignmentTable = new TableView<Assignment>();
-         assignmentTable.setRowFactory(tv -> {
-        	 TableRow<Assignment> row = new TableRow<>();
-        	 
-        	 row.setOnMouseClicked(event -> {
-        		 	System.out.println("WOAH");
-        	        if (! row.isEmpty()) {
-        	            Assignment clickedRow = row.getItem();
-        	            System.out.println(clickedRow.getName());
-        	        }
-        	    });
-        	 
-        	 return row;
-        	 
-         });
-         
-         
-         assignmentTable.setMinHeight(screenSize.getHeight()-100);
-         assignmentTable.setItems(AM.getAssignments());
-         assignmentTable.getColumns().addAll(assignCol);
+         assignmentManager = new TableView<Assignment>();
+         assignmentManager.setMinHeight(screenSize.getHeight()-50);
+         assignmentManager.setItems(AM.getAssignments());
+         assignmentManager.getColumns().addAll(assignCol);
     }
     
     private static VBox navBarButtons()
@@ -144,6 +98,10 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     	// Logout Button
         logoutButton = new Button("Log Out");
         logoutButton.setOnAction(e -> logout(login));
+        logoutButton.setMaxWidth(Double.MAX_VALUE);
+        
+        logoutButton = new Button("View Single Assignment");
+        logoutButton.setOnAction(e -> viewAssignmentScreen(AM.getAssignment(0)));
         logoutButton.setMaxWidth(Double.MAX_VALUE);
     	
     	// Home Back Button
@@ -246,7 +204,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     	VBox newBox = new VBox();
     	VBox navBar = navBarButtons();
     	
-    	// Sign Up Input
+    	// Assignment Detail Input
     	Label titleLabel = new Label("Assignment Title");
         TextField assignTitle = new TextField("Assignment Title");
         assignTitle.setMaxWidth(Double.MAX_VALUE);
@@ -298,18 +256,18 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         		dueLabel, dueDate, priorityLabel, pSlide);
         newBox.getChildren().addAll(createButton, cancelButton);
         
+        newBox.setPadding(new Insets(screenSize.getHeight()/2-200,0,0,screenSize.getWidth()/2-75));
     	// Add Assignment Setup
         GridPane addAssign = new GridPane();
-        addAssign.setPadding(new Insets(screenSize.getHeight()/2-200,0,0,screenSize.getWidth()/2-75));
         addAssign.setVgap(8);
         addAssign.setHgap(10);
-        addAssign.getChildren().addAll(newBox);
+        addAssign.getChildren().addAll(newBox, navBar);
     	addAssignment = new Scene(addAssign, screenSize.getWidth(), screenSize.getHeight());
     }
     
     private static void calendarScreen()
     {
-    	CalendarView calendarView = new CalendarView(AM.getAssignments()) ;
+    	CalendarView calendarView = new CalendarView(AM) ;
 	
     	VBox navBar = navBarButtons();
     	// Calendar Page Setup
@@ -422,21 +380,69 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         homeGrid.setHgap(10);
         VBox homeVBox = new VBox();
         homeVBox.setPadding(new Insets(0, 10, 10, 150));
-        homeVBox.getChildren().addAll(header, assignmentTable);
+        homeVBox.getChildren().addAll(header, assignmentManager);
         homeGrid.getChildren().addAll(homeVBox, addBox, navBar);
     	home = new Scene(homeGrid, screenSize.getWidth(), screenSize.getHeight());
     }
-
-    /*
-    public void getAssignments()
+    
+    // View Assignment Screen
+    private static void viewAssignmentScreen(Assignment toView)
     {
-       //assignments = FXCollections.observableArrayList(AM.getAssignments());
+    	VBox newBox = new VBox();
+    	VBox navBar = navBarButtons();
+    	
+    	// Sign Up Input
+    	Label titleLabel = new Label("Assignment Title");
+        Label assignTitle =new Label(toView.getName());
+        assignTitle.setMaxWidth(Double.MAX_VALUE);
+        
+    	Label descLabel = new Label("Description");
+        Label description = new Label(toView.description());
+        description.setMaxWidth(Double.MAX_VALUE);
+
+    	Label dueLabel = new Label("Due Date");
+    	Label due = new Label(toView.getDue());
+    	
+    	Label priorityLabel = new Label("Current Priority: " + toView.getPriority()); 
+    	
+
+        Button editButton = new Button("Modify Assignment");
+        editButton.setMaxWidth(Double.MAX_VALUE);
+        editButton.setOnAction(e -> editAssignment(toView));
+        
+        Button completeButton = new Button("Mark Complete");
+        completeButton.setMaxWidth(Double.MAX_VALUE);
+        completeButton.setOnAction(e -> markComplete(toView));
+        
+        Button deleteButton = new Button("Delete");
+        deleteButton.setMaxWidth(Double.MAX_VALUE);
+        deleteButton.setOnAction(e -> deleteAssignment(toView));
+        
+        // The title text on top and its alignment
+    	Label header = new Label("View Assignment");
+        header.setMaxWidth(Double.MAX_VALUE);
+        header.setAlignment(Pos.CENTER);
+        
+        newBox.setSpacing(10);
+        newBox.getChildren().addAll(header, titleLabel, assignTitle, descLabel, description, 
+        		dueLabel, priorityLabel);
+        newBox.getChildren().addAll(editButton, completeButton, deleteButton);
+        
+        newBox.setPadding(new Insets(screenSize.getHeight()/2-200,0,0,screenSize.getWidth()/2-75));
+    	// Add Assignment Setup
+        GridPane addAssign = new GridPane();
+        addAssign.setVgap(8);
+        addAssign.setHgap(10);
+        addAssign.getChildren().addAll(newBox, navBar);
+    	viewAssignment = new Scene(addAssign, screenSize.getWidth(), screenSize.getHeight());
+    	window.setScene(viewAssignment);
     }
-	*/
+
     public static void main(String[] args) {
         launch(args);
     }
     
+   
     private static void createAssignment(String nam, String des, String due, double priority)
     {
     	AM.addAssignment(nam,des,due,priority);
@@ -448,6 +454,75 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     {
     	window.setScene(login);
     }
+    
+    private static void editAssignment(Assignment a)
+    {
+    	VBox newBox = new VBox();
+    	VBox navBar = navBarButtons();
+    	
+    	// Assignment Detail Input
+    	Label titleLabel = new Label("Assignment Title");
+        TextField assignTitle = new TextField(a.getName());
+        assignTitle.setMaxWidth(Double.MAX_VALUE);
+        
+    	Label descLabel = new Label("Description");
+
+        TextField description = new TextField(a.description());
+        description.setMaxWidth(Double.MAX_VALUE);
+
+    	Label dueLabel = new Label("Due Date");
+    	DatePicker dueDate = new DatePicker(); 
+    	dueDate.setValue(LocalDate.now());
+
+    	Label priorityLabel = new Label("Priority (1-10)");        
+    	
+    	// Create a slider to get a number value
+    	Slider pSlide = new Slider();
+        pSlide.setMin(1);
+        pSlide.setMax(10);
+        pSlide.setValue(a.getPriority());
+        pSlide.setShowTickLabels(true);
+        pSlide.setShowTickMarks(true);
+        pSlide.setMajorTickUnit(1);
+        pSlide.setMinorTickCount(0);
+        pSlide.setSnapToTicks(true);
+        pSlide.setMaxWidth(Double.MAX_VALUE);
+      
+
+        Button saveButton = new Button("Save");
+        saveButton.setMaxWidth(Double.MAX_VALUE);
+        saveButton.setOnAction(e -> {
+        	createAssignment(assignTitle.getText(), description.getText(),
+        			dueDate.getValue().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")),
+            		pSlide.getValue());
+            deleteAssignment(a);
+        });
+        		
+        
+        cancelButton = new Button("Cancel");
+        cancelButton.setMaxWidth(Double.MAX_VALUE);
+        cancelButton.setOnAction(e -> window.setScene(viewAssignment));
+    	
+        // The title text on top and its alignment
+    	Label header = new Label("Edit Assignment");
+        header.setMaxWidth(Double.MAX_VALUE);
+        header.setAlignment(Pos.CENTER);
+        
+        newBox.setSpacing(10);
+        newBox.getChildren().addAll(header, titleLabel, assignTitle, descLabel, description, 
+        		dueLabel, dueDate, priorityLabel, pSlide);
+        newBox.getChildren().addAll(saveButton, cancelButton);
+        
+        newBox.setPadding(new Insets(screenSize.getHeight()/2-200,0,0,screenSize.getWidth()/2-75));
+    	// Add Assignment Setup
+        GridPane addAssign = new GridPane();
+        addAssign.setVgap(8);
+        addAssign.setHgap(10);
+        addAssign.getChildren().addAll(newBox, navBar);
+    	editAssignment = new Scene(addAssign, screenSize.getWidth(), screenSize.getHeight());
+    	window.setScene(editAssignment);
+    }
+    
     private static void goToHome(Scene home)
     {
     	//TableView<Assignments> assignment;
@@ -455,6 +530,20 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     	window.setScene(home);
     	
     }
+    
+    
+    private static void deleteAssignment(Assignment a)
+    {
+    	AM.deleteAssignment(a);
+    	window.setScene(home);
+    }
+    
+    private static void markComplete(Assignment a)
+    {
+    	AM.markComplete(a);
+    	window.setScene(home);
+    }
+    
 
     @Override
     public void handle(ActionEvent event) {

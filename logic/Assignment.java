@@ -46,6 +46,14 @@ public class Assignment implements Comparable
 	   
    }
    
+   public void updateAssignment(String n, String d, LocalDate du, double p)
+   {
+	   name=n;
+	   description=d; 
+	   dueDate=du;
+	   priority=p;  
+   }
+   
    @Override
    public int compareTo(Object o) 
    {

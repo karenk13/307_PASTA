@@ -13,17 +13,37 @@ import javafx.collections.ObservableList;
 * Cole Grigsby 
 */ 
 public class AssignmentManager {
-
-	
 	
 	private ObservableList<Assignment> assignments; 
+	private ObservableList<Assignment> completeAssignments;
 	
 	public AssignmentManager(){
 		assignments = FXCollections.observableArrayList();
+		completeAssignments = FXCollections.observableArrayList();
 	}
 	
 	protected ObservableList<Assignment> getAssignments() {
 		return assignments; 
+	}
+	
+	protected ObservableList<Assignment> getComplete() {
+		return completeAssignments; 
+	}
+	
+	public void deleteAssignment(Assignment a)
+	{
+		assignments.remove(a);
+	}
+	
+	public Assignment getAssignment(int index)
+	{
+		return assignments.get(index);
+	}
+	
+	public void markComplete(Assignment a)
+	{
+	   completeAssignments.add(a);
+	   assignments.remove(a);
 	}
 	
 	protected ObservableList<Assignment> addAssignment(String name, String description, String due, 
@@ -34,10 +54,11 @@ public class AssignmentManager {
 		return assignments;
 	}
 	
-	protected static ObservableList<Assignment> getAssignmentsOnDate(ObservableList<Assignment> ass, LocalDate date){
+	protected ObservableList<Assignment> getAssignmentsOnDate(LocalDate date){
 		ObservableList<Assignment> a = FXCollections.observableArrayList(); 
 		
-		for (Assignment i: ass){
+		//TODO 
+		for (Assignment i: assignments){
 			if (i.dueDate().equals(date)){
 				a.add(i);
 			}
