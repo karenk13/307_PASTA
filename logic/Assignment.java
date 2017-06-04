@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 public class Assignment implements Comparable
 {
    private String name;
@@ -61,9 +62,18 @@ public class Assignment implements Comparable
    }
 
    // Accessor Methods
-   public String name()
+   public String getName()
    {
       return name;
+   }
+   public double getPriority()
+   {
+	   return priority;
+   }
+   public String getDue()
+   {
+	   DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM dd yyyy");
+	   return dueDate.format(formatter);
    }
 
    public String description()

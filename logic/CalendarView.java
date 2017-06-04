@@ -119,7 +119,7 @@ public class CalendarView {
             // TODO TODO TODO !!! 
             for (Assignment a: AM.getAssignmentsOnDate(date)){
             	System.out.println("WHAT");
-            	Label ass = new Label(a.name());
+            	Label ass = new Label(a.getName());
             	ass.setOnMouseClicked(new EventHandler<MouseEvent>()
             	{
 	                @Override

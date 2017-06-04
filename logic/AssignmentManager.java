@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 /*
 * Cole Grigsby 
 */ 
@@ -13,17 +16,17 @@ public class AssignmentManager {
 
 	
 	
-	private ArrayList<Assignment> assignments; 
+	private ObservableList<Assignment> assignments; 
 	
 	public AssignmentManager(){
-		assignments = new ArrayList<Assignment>();
+		assignments = FXCollections.observableArrayList();
 	}
 	
-	protected ArrayList<Assignment> getAssignments() {
+	protected ObservableList<Assignment> getAssignments() {
 		return assignments; 
 	}
 	
-	protected ArrayList<Assignment> addAssignment(String name, String description, String due, 
+	protected ObservableList<Assignment> addAssignment(String name, String description, String due, 
 			double priority){
 		//TODO add params and create new assignment and add to assignments 
 		assignments.add(new Assignment(name, description, LocalDate.parse(due,
@@ -31,8 +34,8 @@ public class AssignmentManager {
 		return assignments;
 	}
 	
-	protected ArrayList<Assignment> getAssignmentsOnDate(LocalDate date){
-		ArrayList<Assignment> a = new ArrayList<Assignment>(); 
+	protected ObservableList<Assignment> getAssignmentsOnDate(LocalDate date){
+		ObservableList<Assignment> a = FXCollections.observableArrayList(); 
 		
 		//TODO 
 		for (Assignment i: assignments){
@@ -45,16 +48,9 @@ public class AssignmentManager {
 		
 	}
 	
-	public ArrayList<Assignment> getAssignmentsPriority(LocalDate date)
+	public void getAssignmentsPriority()
 	{
-		ArrayList<Assignment> a = new ArrayList<Assignment>();
-		
-		for(Assignment i: assignments)
-		{
-			a.add(i);
-		}
-		Collections.sort(a);
-		return a;
+		Collections.sort(assignments);	
 	}
 	
 	
