@@ -4,7 +4,7 @@ public class User {
 
 	private String name;
 	private String password;
-	private AssignmentManager AM; 
+	private AssignmentManager aM; 
 	
 	public User() {
 		this("No", "password");
@@ -13,7 +13,7 @@ public class User {
 	public User(String name, String password){
 		this.name= name;
 		this.password=password; 
-		AM = new AssignmentManager(); 
+		aM = new AssignmentManager(); 
 	}
 	
 	protected String getName(){
@@ -25,7 +25,7 @@ public class User {
 	}
 	
 	public AssignmentManager getAM() {
-		return AM; 
+		return aM; 
 	}
 	
 }

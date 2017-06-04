@@ -1,6 +1,5 @@
 package logic;
 import javafx.geometry.Pos;
-
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.time.LocalDate;
@@ -8,14 +7,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import javafx.application.Application;
-import javafx.collections.ObservableList;
-import javafx.collections.FXCollections;
 import javafx.scene.Scene;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-//import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -25,27 +21,32 @@ import javafx.geometry.Insets;
 
 public class Main extends Application implements EventHandler<ActionEvent>{
 
-    static Stage window;
-    static TableView<Assignment> assignmentManager;
-    static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    protected static Stage window;
+    private static TableView<Assignment> assignmentManager;
+    private static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     
-    static Button loginButton, signUpButton, createSignUpButton, cancelButton, logoutButton, homeButton;
-    static Button assignmentButton, calendarButton, scratchpadButton, settingsButton, exitButton;
-    static Scene login, home, createUser, addAssignment, calendar, scratchpad, settings, viewAssignment;
-    static Scene editAssignment, previousScene;
-    static Scene currentScene;
+    private static Button loginButton;
+    
+    private static Scene login;
+    private static Scene home;
+    private static Scene createUser;
+    protected static Scene addAssignment;
+    private static Scene calendar;
+    private static Scene scratchpad;
+    private static Scene settings;
+    private static Scene viewAssignment;
+    
    
     private static User user; 
     private static ArrayList<User> users;
-    private static AssignmentManager AM; 
+    private static AssignmentManager aM; 
     
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public  void start(Stage primaryStage) throws Exception{
         window = primaryStage;
         window.setTitle("PASTA");
         defaultUsers();
-        //TODO get AM from the user that signs in 
-        AM = users.get(0).getAM();
+        aM = users.get(0).getAM();
         
         
         // Initialize Scenes
@@ -64,9 +65,9 @@ public class Main extends Application implements EventHandler<ActionEvent>{
 
     }
     
-    private void defaultUsers()
+    private static void defaultUsers()
     {
-    	users = new ArrayList<User>();
+    	users = new ArrayList<>();
     	users.add(new User("Username", "Password"));
     	users.add(new User("Test", "dummy"));
     	users.add(new User("Jon", "Scott"));
@@ -94,9 +95,9 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         
          assignCol.getColumns().addAll(nameCol, dueCol, pCol);
         
-         assignmentManager = new TableView<Assignment>();
+         assignmentManager = new TableView<>();
          assignmentManager.setMinHeight(screenSize.getHeight()-50);
-         assignmentManager.setItems(AM.getAssignments());
+         assignmentManager.setItems(aM.getAssignments());
          assignmentManager.getColumns().addAll(assignCol);
          
     }
@@ -107,37 +108,37 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     	VBox navBar;
     	
     	// Logout Button
-        logoutButton = new Button("Log Out");
+        Button logoutButton = new Button("Log Out");
         logoutButton.setOnAction(e -> logout(login));
         logoutButton.setMaxWidth(Double.MAX_VALUE);
     	
     	// Home Back Button
-        homeButton = new Button("Home");
+        Button homeButton = new Button("Home");
         homeButton.setOnAction(e -> goToHome(home));
         homeButton.setMaxWidth(Double.MAX_VALUE);
 
     	// Add Calendar
-        calendarButton = new Button("Calendar");
+        Button calendarButton = new Button("Calendar");
         calendarButton.setOnAction(e -> window.setScene(calendar));
         calendarButton.setMaxWidth(Double.MAX_VALUE);
         
         // Add Assignment
-        assignmentButton = new Button("Assignments");
+        Button assignmentButton = new Button("Assignments");
         assignmentButton.setOnAction(e -> window.setScene(addAssignment));
         assignmentButton.setMaxWidth(Double.MAX_VALUE);
 
         //Add Scratch pad
-        scratchpadButton = new Button("Scratchpad");
+        Button scratchpadButton = new Button("Scratchpad");
         scratchpadButton.setOnAction(e -> window.setScene(scratchpad));
         scratchpadButton.setMaxWidth(Double.MAX_VALUE);
 
         // Add Settings
-        settingsButton = new Button("Settings");
+        Button settingsButton = new Button("Settings");
         settingsButton.setOnAction(e -> window.setScene(settings));
         settingsButton.setMaxWidth(Double.MAX_VALUE);
         
         // Add Exit
-        exitButton = new Button("Exit PASTA");
+        Button exitButton = new Button("Exit PASTA");
         exitButton.setOnAction(e -> System.exit(0));
         exitButton.setMaxWidth(Double.MAX_VALUE);
         
@@ -153,7 +154,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     
     private static void newUser()
     {
-    	//TODO create new user instance and set up AM 
+    	// create new user instance and set up AM 
     	VBox newUserBox = new VBox();
     	double boxWidth = 200;
     	double height = screenSize.getHeight();
@@ -180,7 +181,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         TextField confirmPassInput = new TextField("Confirm Password");
         confirmPassInput.setMaxWidth(Double.MAX_VALUE);
 
-        createSignUpButton = new Button("Create Account");
+        Button createSignUpButton = new Button("Create Account");
         createSignUpButton.setMaxWidth(Double.MAX_VALUE);
         createSignUpButton.setOnAction(e -> 
         {
@@ -188,7 +189,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         	window.setScene(login);
         });
         
-        cancelButton = new Button("Cancel");
+        Button cancelButton = new Button("Cancel");
         cancelButton.setMaxWidth(Double.MAX_VALUE);
         cancelButton.setOnAction(e -> window.setScene(login));
 
@@ -251,7 +252,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         		description.getText(), dueDate.getValue().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")),
         		pSlide.getValue()));
         
-        cancelButton = new Button("Cancel");
+        Button cancelButton = new Button("Cancel");
         cancelButton.setMaxWidth(Double.MAX_VALUE);
         cancelButton.setOnAction(e -> window.setScene(home));
     	
@@ -276,7 +277,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     
     private static void calendarScreen()
     {
-    	CalendarView calendarView = new CalendarView(AM.getAssignments()) ;
+    	CalendarView calendarView = new CalendarView(aM.getAssignments()) ;
 	
     	VBox navBar = navBarButtons();
     	// Calendar Page Setup
@@ -343,12 +344,12 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         passInput.setMaxWidth(Double.MAX_VALUE);
         
         // Login Action
-        loginButton = new Button("Log In");
+        Button loginButton = new Button("Log In");
         loginButton.setMaxWidth(Double.MAX_VALUE);
         loginButton.setOnAction(e -> authenticate(userInput.getText(), passInput.getText()));
         
         // Sign Up Action
-        signUpButton = new Button("Sign Up");
+        Button signUpButton = new Button("Sign Up");
         signUpButton.setMaxWidth(Double.MAX_VALUE);
         signUpButton.setOnAction(e -> window.setScene(createUser));
     	
@@ -371,7 +372,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     	Button add = new Button("New Assignment");
     	add.setOnAction(e -> window.setScene(addAssignment));
     	Button sort = new Button("Sort");
-    	sort.setOnAction(e -> AM.getAssignmentsPriority());
+    	sort.setOnAction(e -> aM.getAssignmentsPriority());
     	HBox addBox = new HBox();
     	
     	addBox.getChildren().addAll(sort, add);
@@ -452,7 +453,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
    
     private static void createAssignment(String nam, String des, String due, double priority)
     {
-    	AM.addAssignment(nam,des,due,priority);
+    	aM.addAssignment(nam,des,due,priority);
     	currentAssignments();
     	addAssignmentScreen();
     	window.setScene(home);
@@ -506,7 +507,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         });
         		
         
-        cancelButton = new Button("Cancel");
+        Button cancelButton = new Button("Cancel");
         cancelButton.setMaxWidth(Double.MAX_VALUE);
         cancelButton.setOnAction(e -> window.setScene(viewAssignment));
     	
@@ -526,13 +527,12 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         addAssign.setVgap(8);
         addAssign.setHgap(10);
         addAssign.getChildren().addAll(newBox, navBar);
-    	editAssignment = new Scene(addAssign, screenSize.getWidth(), screenSize.getHeight());
+    	Scene editAssignment = new Scene(addAssign, screenSize.getWidth(), screenSize.getHeight());
     	window.setScene(editAssignment);
     }
     
     private static void goToHome(Scene home)
     {
-    	//TableView<Assignments> assignment;
     	currentAssignments();
     	window.setScene(home);
     	
@@ -541,13 +541,13 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     
     private static void deleteAssignment(Assignment a)
     {
-    	AM.deleteAssignment(a);
+    	aM.deleteAssignment(a);
     	window.setScene(home);
     }
     
     private static void markComplete(Assignment a)
     {
-    	AM.markComplete(a);
+    	aM.markComplete(a);
     	window.setScene(home);
     }
     
@@ -558,7 +558,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     		if(a.getName().equals(username) && a.getPassword().equals(password))
 			{
     			user = a;
-    			AM = user.getAM(); 
+    			aM = user.getAM(); 
     			currentAssignments();
     			homeScreen();
     			window.setScene(home);

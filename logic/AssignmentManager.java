@@ -7,9 +7,6 @@ import java.util.Collections;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-/*
-* Cole Grigsby 
-*/ 
 public class AssignmentManager {
 	
 	private ObservableList<Assignment> assignments; 
@@ -64,7 +61,6 @@ public class AssignmentManager {
 			LocalDate date){
 		ObservableList<Assignment> a = FXCollections.observableArrayList(); 
 		
-		//TODO 
 		for (Assignment i: l){
 			if (i.dueDate().equals(date)){
 				a.add(i);

@@ -130,14 +130,14 @@ public class CalendarView {
             b.setTop(label);
             GridPane g = new GridPane();
             int i = 0;
-            //TODO get a list of assignments due on each day 
+            // get a list of assignments due on each day 
             for (Assignment a: AssignmentManager.getAssignmentsOnDate(assignments, date)){
             	Label ass = new Label(a.getName());
             	ass.setOnMouseClicked(new EventHandler<MouseEvent>()
             	{
 	                @Override
 	                public void handle(MouseEvent t) {	                	
-	                    // TODO VIEW ASSIGNEMT Main.window.setScene(Main.viewAssignment);
+	                    // VIEW ASSIGNEMT 
 	                }
             	});
             	g.addRow(i++, ass);
