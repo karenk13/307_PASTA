@@ -12,6 +12,7 @@ import java.util.Locale;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.css.PseudoClass;
 import javafx.event.EventHandler;
@@ -47,6 +48,15 @@ public class CalendarView {
             changeDate());
         
         this.assignments = aM;
+        
+        assignments.addListener(new ListChangeListener<Assignment>(){
+
+			@Override
+			public void onChanged(Change c) {
+				changeDate();
+			}
+        	
+        });
        
 		Button next = new Button(">");
 		next.setOnAction(e -> this.nextMonth());
@@ -116,6 +126,10 @@ public class CalendarView {
             label.getStyleClass().add("calendar-cell");
             final HBox hbox = new HBox();
             hbox.setMinSize(100,100);
+            BorderPane b = new BorderPane(); 
+            b.setTop(label);
+            GridPane g = new GridPane();
+            int i = 0;
             //TODO get a list of assignments due on each day 
             for (Assignment a: AssignmentManager.getAssignmentsOnDate(assignments, date)){
             	Label ass = new Label(a.getName());
@@ -126,9 +140,11 @@ public class CalendarView {
 	                    // TODO VIEW ASSIGNEMT Main.window.setScene(Main.viewAssignment);
 	                }
             	});
-            	hbox.getChildren().add(ass);
+            	g.addRow(i++, ass);
             }
-            hbox.getChildren().add(label);
+            b.setCenter(g);
+
+            hbox.getChildren().add(b);
             hbox.setStyle("-fx-border-color: black;");
             final LocalDate dt = date;  
             hbox.setOnMouseClicked(new EventHandler<MouseEvent>()
