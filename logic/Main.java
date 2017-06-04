@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
 import javafx.scene.Scene;
@@ -20,6 +21,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 
 public class Main extends Application implements EventHandler<ActionEvent>{
 
@@ -210,10 +212,8 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     protected static void addAssignmentScreen(LocalDate due)
     {
     	VBox newBox = new VBox();
-    	/*double boxWidth = 200;
-    	double height = screenSize.getHeight();
-    	double width = screenSize.getWidth();
-    	*/
+    	VBox navBar = navBarButtons();
+    	
     	// Sign Up Input
     	Label titleLabel = new Label("Assignment Title");
         TextField assignTitle = new TextField("Assignment Title");
@@ -231,14 +231,26 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     	else 
     		dueDate.setValue(LocalDate.now());
 
-    	Label priorityLabel = new Label("Priority (1-10)");
-        TextField priority = new TextField("Priority Rating");
-        priority.setMaxWidth(Double.MAX_VALUE);
+    	Label priorityLabel = new Label("Priority (1-10)");        
+    	
+    	// Create a slider to get a number value
+    	Slider pSlide = new Slider();
+        pSlide.setMin(1);
+        pSlide.setMax(10);
+        pSlide.setValue(5);
+        pSlide.setShowTickLabels(true);
+        pSlide.setShowTickMarks(true);
+        pSlide.setMajorTickUnit(1);
+        pSlide.setMinorTickCount(0);
+        pSlide.setSnapToTicks(true);
+        pSlide.setMaxWidth(Double.MAX_VALUE);
+      
 
         Button createButton = new Button("Create Assignment");
         createButton.setMaxWidth(Double.MAX_VALUE);
         createButton.setOnAction(e -> createAssignment(assignTitle.getText(),
-        		description.getText(), dueDate.getValue().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")), Integer.parseInt(priority.getText())));
+        		description.getText(), dueDate.getValue().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")),
+        		pSlide.getValue()));
         
         cancelButton = new Button("Cancel");
         cancelButton.setMaxWidth(Double.MAX_VALUE);
@@ -251,13 +263,12 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         
         newBox.setSpacing(10);
         newBox.getChildren().addAll(header, titleLabel, assignTitle, descLabel, description, 
-        		dueLabel, dueDate, priorityLabel, priority);
+        		dueLabel, dueDate, priorityLabel, pSlide);
         newBox.getChildren().addAll(createButton, cancelButton);
-        
         
     	// Add Assignment Setup
         GridPane addAssign = new GridPane();
-        addAssign.setPadding(new Insets(screenSize.getHeight()/2-100,0,0,screenSize.getWidth()/2-75));
+        addAssign.setPadding(new Insets(screenSize.getHeight()/2-200,0,0,screenSize.getWidth()/2-75));
         addAssign.setVgap(8);
         addAssign.setHgap(10);
         addAssign.getChildren().addAll(newBox);
@@ -393,7 +404,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         launch(args);
     }
     
-    private static void createAssignment(String nam, String des, String due, int priority)
+    private static void createAssignment(String nam, String des, String due, double priority)
     {
     	AM.addAssignment(nam,des,due,priority);
     	currentAssignments();

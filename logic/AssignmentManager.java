@@ -3,6 +3,8 @@ package logic;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /*
 * Cole Grigsby 
@@ -22,7 +24,7 @@ public class AssignmentManager {
 	}
 	
 	protected ArrayList<Assignment> addAssignment(String name, String description, String due, 
-			int priority){
+			double priority){
 		//TODO add params and create new assignment and add to assignments 
 		assignments.add(new Assignment(name, description, LocalDate.parse(due,
 				DateTimeFormatter.ofPattern("MM/dd/yyyy")) , priority));
@@ -41,6 +43,18 @@ public class AssignmentManager {
 		
 		return a;
 		
+	}
+	
+	public ArrayList<Assignment> getAssignmentsPriority(LocalDate date)
+	{
+		ArrayList<Assignment> a = new ArrayList<Assignment>();
+		
+		for(Assignment i: assignments)
+		{
+			a.add(i);
+		}
+		Collections.sort(a);
+		return a;
 	}
 	
 	

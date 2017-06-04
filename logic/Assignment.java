@@ -5,7 +5,7 @@ import java.util.Calendar;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-public class Assignment
+public class Assignment implements Comparable
 {
    private String name;
    private String description;
@@ -19,7 +19,7 @@ public class Assignment
    private long timeSpentOnAssignment;
    private long estimatedTime;
    private long startWorkAssignmentTime;
-   private int priority; 
+   private double priority; 
    
    // Constructors
    public Assignment(String name, LocalDate due, long estTime, String desc)
@@ -37,12 +37,27 @@ public class Assignment
       description = desc;
    }
    
-   public Assignment(String n, String d, LocalDate du, int p){
+   public Assignment(String n, String d, LocalDate du, double p){
 	   name=n;
 	   description=d; 
 	   dueDate=du;
 	   priority=p; 
 	   
+   }
+   
+   @Override
+   public int compareTo(Object o) 
+   {
+	   Assignment a = (Assignment)o;
+	   if(a.priority > priority)
+	   {
+		   return 1;
+	   }
+	   else if(a.priority < priority)
+	   {
+		   return -1;
+	   }
+	   return 0;
    }
 
    // Accessor Methods
@@ -175,5 +190,7 @@ public class Assignment
    {
       return createDate.toString();
    }
+
+
 
 }
