@@ -6,12 +6,8 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 
-@Suite.SuiteClasses({TestAssignment.class, TestDate.class})
+@Suite.SuiteClasses({TestAssignment.class})
 
 public class TestSuite {
-
-	
-	
-	
 	
 }
