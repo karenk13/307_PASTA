@@ -12,12 +12,15 @@ import java.util.Locale;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.css.PseudoClass;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -30,9 +33,9 @@ public class CalendarView {
 
 	private final BorderPane view ;
     private final GridPane calendar ;
-    private final AssignmentManager AM;
+    private final ObservableList<Assignment> assignments;
     
-    public CalendarView(YearMonth month, AssignmentManager AM) {
+    public CalendarView(YearMonth month, ObservableList<Assignment> assignments) {
         view = new BorderPane();
         view.getStyleClass().add("calendar");
         calendar = new GridPane();
@@ -45,7 +48,14 @@ public class CalendarView {
         this.month.addListener((obs, oldMonth, newMonth) -> 
             changeDate());
         
-        this.AM = AM;
+        this.assignments = assignments; 
+        this.assignments.addListener(new ListChangeListener<Assignment> () {
+        	
+			@Override
+			public void onChanged(Change<? extends Assignment> c) {
+				changeDate();
+			}
+        });
        
 		Button next = new Button(">");
 		next.setOnAction(e -> this.nextMonth());
@@ -65,8 +75,8 @@ public class CalendarView {
             this.month.get().format(DateTimeFormatter.ofPattern("MMMM yyyy")), 
             this.month));
     }
-    public CalendarView(AssignmentManager AM) {
-        this(YearMonth.now(), AM) ;
+    public CalendarView(ObservableList<Assignment> ass) {
+        this(YearMonth.now(), ass) ;
     }
     public CalendarView() {
         this(YearMonth.now(), null) ;
@@ -117,21 +127,26 @@ public class CalendarView {
             hbox.setMinSize(100,100);
             //TODO get a list of assignments due on each day 
             // TODO TODO TODO !!! 
-            for (Assignment a: AM.getAssignmentsOnDate(date)){
-            	System.out.println("WHAT");
+            BorderPane b = new BorderPane(); 
+            b.setTop(label);
+            GridPane g = new GridPane();
+            int i = 0;
+            for (Assignment a: AssignmentManager.getAssignmentsOnDate(assignments,date)){
+            	//System.out.println("WHAT");
             	Label ass = new Label(a.getName());
             	ass.setOnMouseClicked(new EventHandler<MouseEvent>()
             	{
 	                @Override
 	                public void handle(MouseEvent t) {
-	                	System.out.println("COOL");
+	                	//System.out.println("COOL");
 	                	
 	                    // TODO VIEW ASSIGNEMT Main.window.setScene(Main.viewAssignment);
 	                }
             	});
-            	hbox.getChildren().add(ass);
+            	g.addRow(i++, ass);
             }
-            hbox.getChildren().add(label);
+            b.setCenter(g);
+            hbox.getChildren().add(b);
             hbox.setStyle("-fx-border-color: black;");
             final LocalDate dt = date;  
             hbox.setOnMouseClicked(new EventHandler<MouseEvent>()

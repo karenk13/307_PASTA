@@ -15,6 +15,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseButton;
 //import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -27,8 +28,8 @@ import javafx.geometry.Orientation;
 public class Main extends Application implements EventHandler<ActionEvent>{
 
     static Stage window;
-    static TableView<Assignment> assignment;
-    static TableView<Assignment> assignmentManager;
+    //static TableView<Assignment> assignment;
+    static TableView<Assignment> assignmentTable;
     static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     
     static Button loginButton, signUpButton, createSignUpButton, cancelButton, logoutButton, homeButton;
@@ -39,18 +40,24 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     private static User user; 
     private static AssignmentManager AM; 
     
+    
     @Override
     public void start(Stage primaryStage) throws Exception{
         window = primaryStage;
         window.setTitle("PASTA");
-        assignments = FXCollections.observableArrayList();
+       // assignments = FXCollections.observableArrayList();
         
                         
         
         //TODO get AM from the user that signs in 
         user = new User("Test", "dummy");
         AM = user.getAM(); 
+        assignments = FXCollections.observableArrayList(AM.getAssignments());
 
+        
+
+
+        
         // Assignment View
         /*TableColumn<Assignments, String> nameCol = new TableColumn<>("Assignment");
         nameCol.setMinWidth(200);
@@ -91,7 +98,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     	 TableColumn<Assignment, String> assignCol = new TableColumn<>("Current Assignments");
     	 TableColumn<Assignment, String> nameCol = new TableColumn<> ("Name");
     	 TableColumn<Assignment, String> dueCol = new TableColumn<> ("Due");
-    	 TableColumn<Assignment, Double> pCol = new TableColumn ("Priority");
+    	 TableColumn<Assignment, Double> pCol = new TableColumn<>("Priority");
     	 
          TableColumn<Assignment, String> col2 = new TableColumn<Assignment, String>("Statistics");
          assignCol.setMinWidth(screenSize.getWidth()/2-100);
@@ -105,10 +112,28 @@ public class Main extends Application implements EventHandler<ActionEvent>{
          
          assignCol.getColumns().addAll(nameCol, dueCol, pCol);
         
-         assignmentManager = new TableView<Assignment>();
-         assignmentManager.setMinHeight(screenSize.getHeight()-50);
-         assignmentManager.setItems(AM.getAssignments());
-         assignmentManager.getColumns().addAll(assignCol);
+         
+         
+         assignmentTable = new TableView<Assignment>();
+         assignmentTable.setRowFactory(tv -> {
+        	 TableRow<Assignment> row = new TableRow<>();
+        	 
+        	 row.setOnMouseClicked(event -> {
+        		 	System.out.println("WOAH");
+        	        if (! row.isEmpty()) {
+        	            Assignment clickedRow = row.getItem();
+        	            System.out.println(clickedRow.getName());
+        	        }
+        	    });
+        	 
+        	 return row;
+        	 
+         });
+         
+         
+         assignmentTable.setMinHeight(screenSize.getHeight()-100);
+         assignmentTable.setItems(AM.getAssignments());
+         assignmentTable.getColumns().addAll(assignCol);
     }
     
     private static VBox navBarButtons()
@@ -284,7 +309,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     
     private static void calendarScreen()
     {
-    	CalendarView calendarView = new CalendarView(AM) ;
+    	CalendarView calendarView = new CalendarView(AM.getAssignments()) ;
 	
     	VBox navBar = navBarButtons();
     	// Calendar Page Setup
@@ -397,7 +422,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         homeGrid.setHgap(10);
         VBox homeVBox = new VBox();
         homeVBox.setPadding(new Insets(0, 10, 10, 150));
-        homeVBox.getChildren().addAll(header, assignmentManager);
+        homeVBox.getChildren().addAll(header, assignmentTable);
         homeGrid.getChildren().addAll(homeVBox, addBox, navBar);
     	home = new Scene(homeGrid, screenSize.getWidth(), screenSize.getHeight());
     }
@@ -405,10 +430,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     /*
     public void getAssignments()
     {
-        assignments.add(new Assignments("Word Frequency", "5/23/2017", 100));
-        assignments.add(new Assignments("Diagrams", "5/17/2017", 5));
-        assignments.add(new Assignments("NGA", "6/1/2017", 1000));
-        assignments.add(new Assignments("Math", "5/27/17", 16));   
+       //assignments = FXCollections.observableArrayList(AM.getAssignments());
     }
 	*/
     public static void main(String[] args) {

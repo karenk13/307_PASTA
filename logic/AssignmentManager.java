@@ -34,11 +34,10 @@ public class AssignmentManager {
 		return assignments;
 	}
 	
-	protected ObservableList<Assignment> getAssignmentsOnDate(LocalDate date){
+	protected static ObservableList<Assignment> getAssignmentsOnDate(ObservableList<Assignment> ass, LocalDate date){
 		ObservableList<Assignment> a = FXCollections.observableArrayList(); 
 		
-		//TODO 
-		for (Assignment i: assignments){
+		for (Assignment i: ass){
 			if (i.dueDate().equals(date)){
 				a.add(i);
 			}
