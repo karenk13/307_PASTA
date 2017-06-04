@@ -66,6 +66,23 @@ public class Assignment implements Comparable<Assignment>
 	   }
 	   return 0;
    }
+   
+   @Override
+   public boolean equals(Object o){
+	   if (o != null){
+		   if (this.getClass() != o.getClass())
+			    return false;
+		   Assignment a = (Assignment)o;
+		   return a.name.equals(this.name) && a.dueDate.equals(this.dueDate);
+	   }
+	   return false;
+   }
+   
+   @Override
+   public int hashCode() {
+	   return (name+dueDate.toString()).hashCode();
+   }
+   
 
    // Accessor Methods
    public String getName()

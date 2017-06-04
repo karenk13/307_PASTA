@@ -276,7 +276,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     
     private static void calendarScreen()
     {
-    	CalendarView calendarView = new CalendarView(AM) ;
+    	CalendarView calendarView = new CalendarView(AM.getAssignments()) ;
 	
     	VBox navBar = navBarButtons();
     	// Calendar Page Setup
@@ -409,7 +409,6 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         description.setMaxWidth(Double.MAX_VALUE);
 
     	Label dueLabel = new Label("Due Date");
-    	Label due = new Label(toView.getDue());
     	
     	Label priorityLabel = new Label("Current Priority: " + toView.getPriority()); 
     	

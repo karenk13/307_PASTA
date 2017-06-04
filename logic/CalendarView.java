@@ -12,6 +12,7 @@ import java.util.Locale;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.collections.ObservableList;
 import javafx.css.PseudoClass;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -30,9 +31,9 @@ public class CalendarView {
 
 	private final BorderPane view ;
     private final GridPane calendar ;
-    private final AssignmentManager AM;
+    private final ObservableList<Assignment> assignments;
     
-    public CalendarView(YearMonth month, AssignmentManager AM) {
+    public CalendarView(YearMonth month, ObservableList<Assignment> aM) {
         view = new BorderPane();
         view.getStyleClass().add("calendar");
         calendar = new GridPane();
@@ -45,7 +46,7 @@ public class CalendarView {
         this.month.addListener((obs, oldMonth, newMonth) -> 
             changeDate());
         
-        this.AM = AM;
+        this.assignments = aM;
        
 		Button next = new Button(">");
 		next.setOnAction(e -> this.nextMonth());
@@ -65,8 +66,8 @@ public class CalendarView {
             this.month.get().format(DateTimeFormatter.ofPattern("MMMM yyyy")), 
             this.month));
     }
-    public CalendarView(AssignmentManager AM) {
-        this(YearMonth.now(), AM) ;
+    public CalendarView(ObservableList<Assignment> aM) {
+        this(YearMonth.now(), aM) ;
     }
     public CalendarView() {
         this(YearMonth.now(), null) ;
@@ -94,7 +95,7 @@ public class CalendarView {
         
         // column headers:
         for (int dayOfWeek = 1 ; dayOfWeek <= 7 ; dayOfWeek++) {
-            LocalDate date = first.minusDays(dayOfWeekOfFirst - dayOfWeek);
+            LocalDate date = first.minusDays((long)dayOfWeekOfFirst - dayOfWeek);
             DayOfWeek day = date.getDayOfWeek() ;
             Label label = new Label(day.getDisplayName(TextStyle.SHORT_STANDALONE, locale.get()));
             label.getStyleClass().add("calendar-day-header");
@@ -102,10 +103,10 @@ public class CalendarView {
             calendar.add(label, dayOfWeek - 1, 0);
         }
         
-        LocalDate firstDisplayedDate = first.minusDays(dayOfWeekOfFirst - 1);
+        LocalDate firstDisplayedDate = first.minusDays((long)dayOfWeekOfFirst - 1);
         LocalDate last = month.get().atEndOfMonth() ;
         int dayOfWeekOfLast = last.get(weekFields.dayOfWeek());
-        LocalDate lastDisplayedDate = last.plusDays(7 - dayOfWeekOfLast);
+        LocalDate lastDisplayedDate = last.plusDays(7 - (long)dayOfWeekOfLast);
         
         PseudoClass beforeMonth = PseudoClass.getPseudoClass("before-display-month");
         PseudoClass afterMonth = PseudoClass.getPseudoClass("after-display-month");
@@ -116,16 +117,12 @@ public class CalendarView {
             final HBox hbox = new HBox();
             hbox.setMinSize(100,100);
             //TODO get a list of assignments due on each day 
-            // TODO TODO TODO !!! 
-            for (Assignment a: AM.getAssignmentsOnDate(date)){
-            	System.out.println("WHAT");
+            for (Assignment a: AssignmentManager.getAssignmentsOnDate(assignments, date)){
             	Label ass = new Label(a.getName());
             	ass.setOnMouseClicked(new EventHandler<MouseEvent>()
             	{
 	                @Override
-	                public void handle(MouseEvent t) {
-	                	System.out.println("COOL");
-	                	
+	                public void handle(MouseEvent t) {	                	
 	                    // TODO VIEW ASSIGNEMT Main.window.setScene(Main.viewAssignment);
 	                }
             	});

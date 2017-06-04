@@ -55,17 +55,17 @@ public class AssignmentManager {
 	
 	protected ObservableList<Assignment> addAssignment(String name, String description, String due, 
 			double priority){
-		//TODO add params and create new assignment and add to assignments 
 		assignments.add(new Assignment(name, description, LocalDate.parse(due,
 				DateTimeFormatter.ofPattern("MM/dd/yyyy")) , priority));
 		return assignments;
 	}
 	
-	protected ObservableList<Assignment> getAssignmentsOnDate(LocalDate date){
+	protected static ObservableList<Assignment> getAssignmentsOnDate(ObservableList<Assignment> l, 
+			LocalDate date){
 		ObservableList<Assignment> a = FXCollections.observableArrayList(); 
 		
 		//TODO 
-		for (Assignment i: assignments){
+		for (Assignment i: l){
 			if (i.dueDate().equals(date)){
 				a.add(i);
 			}
