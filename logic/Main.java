@@ -67,6 +67,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     private void defaultUsers()
     {
     	users = new ArrayList<User>();
+    	users.add(new User("Username", "Password"));
     	users.add(new User("Test", "dummy"));
     	users.add(new User("Jon", "Scott"));
     	users.add(new User("Cole", "Grigsby"));
@@ -97,6 +98,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
          assignmentManager.setMinHeight(screenSize.getHeight()-50);
          assignmentManager.setItems(AM.getAssignments());
          assignmentManager.getColumns().addAll(assignCol);
+         
     }
     
     private static VBox navBarButtons()
@@ -209,7 +211,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     protected static void addAssignmentScreen(LocalDate due)
     {
     	VBox newBox = new VBox();
-    	//VBox navBar = navBarButtons();
+    	VBox navBar = navBarButtons();
     	
     	// Assignment Detail Input
     	Label titleLabel = new Label("Assignment Title");
@@ -268,7 +270,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         GridPane addAssign = new GridPane();
         addAssign.setVgap(8);
         addAssign.setHgap(10);
-        addAssign.getChildren().addAll(newBox);
+        addAssign.getChildren().addAll(newBox, navBar);
     	addAssignment = new Scene(addAssign, screenSize.getWidth(), screenSize.getHeight());
     }
     
@@ -371,7 +373,6 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     	Button sort = new Button("Sort");
     	sort.setOnAction(e -> AM.getAssignmentsPriority());
     	HBox addBox = new HBox();
-    	
     	
     	addBox.getChildren().addAll(sort, add);
     	addBox.setPadding(new Insets(screenSize.getHeight()-100,0,0,screenSize.getWidth()/2-75));
@@ -557,14 +558,13 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     	{
     		if(a.getName().equals(username) && a.getPassword().equals(password))
 			{
-    			System.out.println("Valid Credentials");
-    			AM = a.getAM(); 
     			user = a;
+    			AM = user.getAM(); 
+    			currentAssignments();
     			homeScreen();
     			window.setScene(home);
 			}
     	}
-    	System.out.println("Invalid Credentials");
     }
     
 

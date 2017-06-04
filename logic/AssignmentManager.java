@@ -33,6 +33,15 @@ public class AssignmentManager {
 		assignments.remove(a);
 	}
 	
+	public int numAssignments()
+	{
+		return assignments.size();
+	}
+	public int completedAssignments()
+	{
+		return completeAssignments.size();
+	}
+	
 	public Assignment getAssignment(int index)
 	{
 		return assignments.get(index);
