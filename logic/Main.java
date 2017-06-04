@@ -21,9 +21,10 @@ import javafx.geometry.Insets;
 
 public class Main extends Application implements EventHandler<ActionEvent>{
 
-    protected static Stage window;
-    private static TableView<Assignment> assignmentManager;
-    private static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    static Stage window;
+    static TableView<Assignment> assignmentManager;
+    static GridPane assignDisplay;
+    static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     
     private static Button loginButton;
     
@@ -78,6 +79,27 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     
     private static void currentAssignments()
     {
+    	
+    	Assignment temp;
+    	assignDisplay = new GridPane();
+    	Label name = new Label("Name");
+    	Label due = new Label("Due");
+    	Label priority = new Label("Priority");
+    	Label select = new Label("Select");
+    	assignDisplay.setVgap(50);
+    	assignDisplay.setHgap(100);
+    	assignDisplay.add(name, 0, 0);
+    	assignDisplay.add(due, 1, 0);
+    	assignDisplay.add(priority, 2, 0);
+    	assignDisplay.add(select, 3, 0);
+    	 
+    	System.out.println("numAssignments: " + AM.numAssignments());
+    	 for(int i = 0; i < AM.numAssignments(); i++)
+    	 {
+    		temp = AM.getAssignment(i);
+    		assignDisplay.add(new Label(temp.getName()), 0, i);
+    	 }
+    	 
     	 TableColumn<Assignment, String> assignCol = new TableColumn<>("Current Assignments"); 	 
          assignCol.setMinWidth(screenSize.getWidth()/2-100);
          
@@ -92,10 +114,15 @@ public class Main extends Application implements EventHandler<ActionEvent>{
          TableColumn<Assignment, Double> pCol = new TableColumn ("Priority");
          pCol.setCellValueFactory(new PropertyValueFactory<Assignment, Double>("priority"));
          pCol.setMinWidth(200);
+         
+         TableColumn<Assignment, Button> buttonCol = new TableColumn("Select");
+         buttonCol.setCellValueFactory(new PropertyValueFactory<Assignment, Button>("button"));
+         buttonCol.setMinWidth(200);
         
-         assignCol.getColumns().addAll(nameCol, dueCol, pCol);
+         assignCol.getColumns().addAll(nameCol, dueCol, pCol, buttonCol);
         
          assignmentManager = new TableView<>();
+         assignmentManager.setEditable(true);
          assignmentManager.setMinHeight(screenSize.getHeight()-50);
          assignmentManager.setItems(aM.getAssignments());
          assignmentManager.getColumns().addAll(assignCol);
@@ -370,13 +397,37 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     private static void homeScreen()
     {
     	Button add = new Button("New Assignment");
+    	add.setMinWidth(150);
     	add.setOnAction(e -> window.setScene(addAssignment));
+    	
     	Button sort = new Button("Sort");
     	sort.setOnAction(e -> aM.getAssignmentsPriority());
-    	HBox addBox = new HBox();
+    	sort.setMinWidth(150);
     	
-    	addBox.getChildren().addAll(sort, add);
-    	addBox.setPadding(new Insets(screenSize.getHeight()-100,0,0,screenSize.getWidth()/2-75));
+    	HBox addBox = new HBox();
+    	addBox.setSpacing(350);
+    	
+    	/*
+    	VBox selectBox = new VBox();
+    	for (int i = 0; i < AM.numAssignments(); i++)
+    	{   
+    		Button temp = new Button("Select");
+    		temp.setMinWidth(Double.MAX_VALUE);
+    		//temp.setOnAction(e -> viewAssignmentScreen(0));
+    		selectBox.getChildren().addAll(temp);
+    	}
+    	*/
+    	
+    	VBox selectButtons = new VBox();
+        Button s1 = new Button("Select");
+        Button s2 = new Button("Select");
+        Button s3 = new Button("Select");
+        Button s4 = new Button("Select");
+        selectButtons.getChildren().addAll(s1,s2,s3,s4);
+        selectButtons.setPadding(new Insets(100,0,0,800));
+    	
+    	addBox.getChildren().addAll(sort, add, selectButtons);
+    	addBox.setPadding(new Insets(17,0,0,150));
     	VBox navBar = navBarButtons();
     	// The title text on top and its alignment
     	Label header = new Label("Welcome to Home, " + user.getName());
@@ -387,22 +438,27 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         homeGrid.setPadding(new Insets(0, 0, 0, 0));
         homeGrid.setVgap(8);
         homeGrid.setHgap(10);
-        VBox homeVBox = new VBox();
-        homeVBox.setPadding(new Insets(0, 10, 10, 150));
-        homeVBox.getChildren().addAll(header, assignmentManager);
-        homeGrid.getChildren().addAll(homeVBox, addBox, navBar);
+        BorderPane root = new BorderPane();
+        root.setLeft(navBar);
+        //root.setTop(addBox);
+        root.setCenter(assignDisplay);
+        //homeVBox.setPadding(new Insets(20, 10, 10, 100));
+       // homeVBox.getChildren().addAll(header, assignmentManager);
+        //homeVBox.getChildren().addAll(header, assignDisplay);
+        homeGrid.getChildren().addAll(root);
     	home = new Scene(homeGrid, screenSize.getWidth(), screenSize.getHeight());
     }
     
     // View Assignment Screen
-    private static void viewAssignmentScreen(Assignment toView)
+    static void viewAssignmentScreen(Assignment toView)
     {
+    	
     	VBox newBox = new VBox();
     	VBox navBar = navBarButtons();
     	
     	// Sign Up Input
     	Label titleLabel = new Label("Assignment Title");
-        Label assignTitle =new Label(toView.getName());
+        Label assignTitle = new Label(toView.getName());
         assignTitle.setMaxWidth(Double.MAX_VALUE);
         
     	Label descLabel = new Label("Description");

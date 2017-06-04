@@ -24,6 +24,11 @@ public class User {
 		return password;
 	}
 	
+	public void setPassword(String pass)
+	{
+		password = pass;
+	}
+	
 	public AssignmentManager getAM() {
 		return aM; 
 	}
