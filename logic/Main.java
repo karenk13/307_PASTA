@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
@@ -37,32 +38,42 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     static Scene currentScene;
    
     private static User user; 
+    private static ArrayList<User> users;
     private static AssignmentManager AM; 
     
     @Override
     public void start(Stage primaryStage) throws Exception{
         window = primaryStage;
         window.setTitle("PASTA");
-         
+        defaultUsers();
         //TODO get AM from the user that signs in 
-        user = new User("Test", "dummy");
-        AM = user.getAM(); 
+        AM = users.get(0).getAM();
+        
         
         // Initialize Scenes
         loginScreen();
         currentAssignments();
-        homeScreen();
         assignmentScreen();
         scratchScreen();
         settingsScreen();
         calendarScreen();
         addAssignmentScreen();
         newUser();
-        homeScreen();
+      
 
         window.setScene(login);
         window.show();
 
+    }
+    
+    private void defaultUsers()
+    {
+    	users = new ArrayList<User>();
+    	users.add(new User("Test", "dummy"));
+    	users.add(new User("Jon", "Scott"));
+    	users.add(new User("Cole", "Grigsby"));
+    	users.add(new User("admin", "admin"));
+    	user = users.get(0);
     }
     
     private static void currentAssignments()
@@ -72,7 +83,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
          
          TableColumn<Assignment, String> nameCol = new TableColumn<> ("Name");
          nameCol.setCellValueFactory(new PropertyValueFactory<Assignment, String>("name"));
-         nameCol.setMinWidth(200);
+         nameCol.setMinWidth(250);
          
          TableColumn<Assignment, String> dueCol = new TableColumn<> ("Due");
          dueCol.setCellValueFactory(new PropertyValueFactory<Assignment, String>("due"));
@@ -98,10 +109,6 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     	// Logout Button
         logoutButton = new Button("Log Out");
         logoutButton.setOnAction(e -> logout(login));
-        logoutButton.setMaxWidth(Double.MAX_VALUE);
-        
-        logoutButton = new Button("View Single Assignment");
-        logoutButton.setOnAction(e -> viewAssignmentScreen(AM.getAssignment(0)));
         logoutButton.setMaxWidth(Double.MAX_VALUE);
     	
     	// Home Back Button
@@ -147,8 +154,6 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     private static void newUser()
     {
     	//TODO create new user instance and set up AM 
-    	
-    	
     	VBox newUserBox = new VBox();
     	double boxWidth = 200;
     	double height = screenSize.getHeight();
@@ -177,7 +182,11 @@ public class Main extends Application implements EventHandler<ActionEvent>{
 
         createSignUpButton = new Button("Create Account");
         createSignUpButton.setMaxWidth(Double.MAX_VALUE);
-        createSignUpButton.setOnAction(e -> window.setScene(home));
+        createSignUpButton.setOnAction(e -> 
+        {
+        	users.add(new User(userSignUpInput.getText(),passSignUpInput.getText()));
+        	window.setScene(login);
+        });
         
         cancelButton = new Button("Cancel");
         cancelButton.setMaxWidth(Double.MAX_VALUE);
@@ -336,8 +345,8 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         // Login Action
         loginButton = new Button("Log In");
         loginButton.setMaxWidth(Double.MAX_VALUE);
-        loginButton.setOnAction(e -> window.setScene(home));
-
+        loginButton.setOnAction(e -> authenticate(userInput.getText(), passInput.getText()));
+        
         // Sign Up Action
         signUpButton = new Button("Sign Up");
         signUpButton.setMaxWidth(Double.MAX_VALUE);
@@ -542,6 +551,22 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     {
     	AM.markComplete(a);
     	window.setScene(home);
+    }
+    
+    private static void authenticate(String username, String password)
+    {
+    	for(User a: users)
+    	{
+    		if(a.getName().equals(username) && a.getPassword().equals(password))
+			{
+    			System.out.println("Valid Credentials");
+    			AM = a.getAM(); 
+    			user = a;
+    			homeScreen();
+    			window.setScene(home);
+			}
+    	}
+    	System.out.println("Invalid Credentials");
     }
     
 
