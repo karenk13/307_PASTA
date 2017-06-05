@@ -93,10 +93,10 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     	assignDisplay.add(priority, 2, 0);
     	assignDisplay.add(select, 3, 0);
     	 
-    	System.out.println("numAssignments: " + AM.numAssignments());
-    	 for(int i = 0; i < AM.numAssignments(); i++)
+    	
+    	 for(int i = 0; i < aM.numAssignments(); i++)
     	 {
-    		temp = AM.getAssignment(i);
+    		temp = aM.getAssignment(i);
     		assignDisplay.add(new Label(temp.getName()), 0, i);
     	 }
     	 
@@ -114,15 +114,13 @@ public class Main extends Application implements EventHandler<ActionEvent>{
          TableColumn<Assignment, Double> pCol = new TableColumn ("Priority");
          pCol.setCellValueFactory(new PropertyValueFactory<Assignment, Double>("priority"));
          pCol.setMinWidth(200);
-         
-         TableColumn<Assignment, Button> buttonCol = new TableColumn("Select");
-         buttonCol.setCellValueFactory(new PropertyValueFactory<Assignment, Button>("button"));
-         buttonCol.setMinWidth(200);
-        
-         assignCol.getColumns().addAll(nameCol, dueCol, pCol, buttonCol);
+            
+         assignCol.getColumns().addAll(nameCol, dueCol, pCol);
         
          assignmentManager = new TableView<>();
          assignmentManager.setEditable(true);
+         assignmentManager.fixedCellSizeProperty();
+         assignmentManager.setFixedCellSize(30);
          assignmentManager.setMinHeight(screenSize.getHeight()-50);
          assignmentManager.setItems(aM.getAssignments());
          assignmentManager.getColumns().addAll(assignCol);
@@ -150,7 +148,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         calendarButton.setMaxWidth(Double.MAX_VALUE);
         
         // Add Assignment
-        Button assignmentButton = new Button("Assignments");
+        Button assignmentButton = new Button("New Assign");
         assignmentButton.setOnAction(e -> window.setScene(addAssignment));
         assignmentButton.setMaxWidth(Double.MAX_VALUE);
 
@@ -396,39 +394,53 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     // Home Page Setup
     private static void homeScreen()
     {
+    	double buttonWidth = 150;
     	Button add = new Button("New Assignment");
-    	add.setMinWidth(150);
+    	add.setMinWidth(buttonWidth);
     	add.setOnAction(e -> window.setScene(addAssignment));
-    	
-    	Button sort = new Button("Sort");
-    	sort.setOnAction(e -> aM.getAssignmentsPriority());
-    	sort.setMinWidth(150);
-    	
-    	HBox addBox = new HBox();
-    	addBox.setSpacing(350);
-    	
-    	/*
-    	VBox selectBox = new VBox();
-    	for (int i = 0; i < AM.numAssignments(); i++)
-    	{   
-    		Button temp = new Button("Select");
-    		temp.setMinWidth(Double.MAX_VALUE);
-    		//temp.setOnAction(e -> viewAssignmentScreen(0));
-    		selectBox.getChildren().addAll(temp);
-    	}
-    	*/
-    	
+    	  	
     	VBox selectButtons = new VBox();
-        Button s1 = new Button("Select");
-        Button s2 = new Button("Select");
-        Button s3 = new Button("Select");
-        Button s4 = new Button("Select");
-        selectButtons.getChildren().addAll(s1,s2,s3,s4);
-        selectButtons.setPadding(new Insets(100,0,0,800));
     	
-    	addBox.getChildren().addAll(sort, add, selectButtons);
-    	addBox.setPadding(new Insets(17,0,0,150));
+        Button s1 = new Button("Select");
+        s1.setMinWidth(buttonWidth);
+        s1.setOnAction(e -> viewAssignmentScreen(aM.getAssignment(0)));
+        
+        Button s2 = new Button("Select");
+        s2.setOnAction(e -> viewAssignmentScreen(aM.getAssignment(1)));
+        s2.setMinWidth(buttonWidth);
+        
+        Button s3 = new Button("Select");
+        s3.setMinWidth(buttonWidth);
+        s3.setOnAction(e -> viewAssignmentScreen(aM.getAssignment(2)));
+        
+        Button s4 = new Button("Select");
+        s4.setMinWidth(buttonWidth);
+        s4.setOnAction(e -> viewAssignmentScreen(aM.getAssignment(3)));
+        
+        Button s5 = new Button("Select");
+        s5.setMinWidth(buttonWidth);
+        s5.setOnAction(e -> viewAssignmentScreen(aM.getAssignment(4)));
+        
+        Button s6 = new Button("Select");
+        s6.setMinWidth(buttonWidth);
+        s6.setOnAction(e -> viewAssignmentScreen(aM.getAssignment(5)));
+        
+        Button s7 = new Button("Select");
+        s7.setMinWidth(buttonWidth);
+        s7.setOnAction(e -> viewAssignmentScreen(aM.getAssignment(6)));
+        
+        Button s8 = new Button("Select");
+        s8.setMinWidth(buttonWidth);
+        s8.setOnAction(e -> viewAssignmentScreen(aM.getAssignment(7)));
+        
+        selectButtons.getChildren().addAll(add, s1,s2,s3,s4,s5,s6,s7,s8);
+        selectButtons.setPadding(new Insets(25,0,0,0));
+        selectButtons.setSpacing(3);
+    	
+    	//addBox.getChildren().addAll(sort, add);
+    	//addBox.setPadding(new Insets(17,0,0,150));
     	VBox navBar = navBarButtons();
+    	
     	// The title text on top and its alignment
     	Label header = new Label("Welcome to Home, " + user.getName());
         header.setMaxWidth(Double.MAX_VALUE);
@@ -441,7 +453,8 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         BorderPane root = new BorderPane();
         root.setLeft(navBar);
         //root.setTop(addBox);
-        root.setCenter(assignDisplay);
+        root.setRight(selectButtons);
+        root.setCenter(assignmentManager);
         //homeVBox.setPadding(new Insets(20, 10, 10, 100));
        // homeVBox.getChildren().addAll(header, assignmentManager);
         //homeVBox.getChildren().addAll(header, assignDisplay);
