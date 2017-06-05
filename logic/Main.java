@@ -14,7 +14,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.geometry.Insets;
@@ -23,7 +22,6 @@ public class Main extends Application implements EventHandler<ActionEvent>{
 
     static Stage window;
     static TableView<Assignment> assignmentManager;
-    static GridPane assignDisplay;
     static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     
     private static Button loginButton;
@@ -37,7 +35,13 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     private static Scene settings;
     private static Scene viewAssignment;
     
-   
+    private static String pString = "Password";
+    private static String uString = "Username";
+    private static String cancelString = "Cancel";
+    private static String desString = "Description";
+    private static String dueString = "Due Date";
+    private static String aString = "Assignment Title";
+    
     private static User user; 
     private static ArrayList<User> users;
     private static AssignmentManager aM; 
@@ -69,7 +73,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     private static void defaultUsers()
     {
     	users = new ArrayList<>();
-    	users.add(new User("Username", "Password"));
+    	users.add(new User(uString, pString));
     	users.add(new User("Test", "dummy"));
     	users.add(new User("Jon", "Scott"));
     	users.add(new User("Cole", "Grigsby"));
@@ -80,26 +84,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     private static void currentAssignments()
     {
     	
-    	Assignment temp;
-    	assignDisplay = new GridPane();
-    	Label name = new Label("Name");
-    	Label due = new Label("Due");
-    	Label priority = new Label("Priority");
-    	Label select = new Label("Select");
-    	assignDisplay.setVgap(50);
-    	assignDisplay.setHgap(100);
-    	assignDisplay.add(name, 0, 0);
-    	assignDisplay.add(due, 1, 0);
-    	assignDisplay.add(priority, 2, 0);
-    	assignDisplay.add(select, 3, 0);
-    	 
-    	 for(int i = 0; i < aM.numAssignments(); i++)
-    	 {
-    		temp = aM.getAssignment(i);
-    		assignDisplay.add(new Label(temp.getName()), 0, i);
-    	 }
-    	 
-    	 TableColumn<Assignment, String> assignCol = new TableColumn<>("Current Assignments"); 	 
+    	 TableColumn<Assignment, String> assignCol = new TableColumn<Assignment, String>("Current Assignments"); 	 
          assignCol.setMinWidth(screenSize.getWidth()/2-100);
          
          TableColumn<Assignment, String> nameCol = new TableColumn<> ("Name");
@@ -110,14 +95,13 @@ public class Main extends Application implements EventHandler<ActionEvent>{
          dueCol.setCellValueFactory(new PropertyValueFactory<Assignment, String>("due"));
          dueCol.setMinWidth(200);
          
-         TableColumn<Assignment, Double> pCol = new TableColumn ("Priority");
-         pCol.setCellValueFactory(new PropertyValueFactory<Assignment, Double>("priority"));
+         TableColumn<Assignment, String> pCol = new TableColumn<Assignment, String> ("Priority");
+         pCol.setCellValueFactory(new PropertyValueFactory<Assignment, String>("priority"));
          pCol.setMinWidth(200);
             
          assignCol.getColumns().addAll(nameCol, dueCol, pCol);
         
          assignmentManager = new TableView<>();
-         assignmentManager.setEditable(true);
          assignmentManager.fixedCellSizeProperty();
          assignmentManager.setFixedCellSize(30);
          assignmentManager.setMinHeight(screenSize.getHeight()-50);
@@ -206,10 +190,10 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         TextField lNameInput = new TextField("Last Name");
         lNameInput.setMaxWidth(Double.MAX_VALUE);
 
-        TextField userSignUpInput = new TextField("Username");
+        TextField userSignUpInput = new TextField(uString);
         userSignUpInput.setMaxWidth(Double.MAX_VALUE);
 
-        TextField passSignUpInput = new TextField("Password");
+        TextField passSignUpInput = new TextField(pString);
         passSignUpInput.setMaxWidth(Double.MAX_VALUE);
 
         TextField confirmPassInput = new TextField("Confirm Password");
@@ -223,7 +207,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         	window.setScene(login);
         });
         
-        Button cancelButton = new Button("Cancel");
+        Button cancelButton = new Button(cancelString);
         cancelButton.setMaxWidth(Double.MAX_VALUE);
         cancelButton.setOnAction(e -> window.setScene(login));
 
@@ -247,18 +231,20 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     {
     	VBox newBox = new VBox();
     	VBox navBar = navBarButtons();
-    	
+    	BorderPane root = new BorderPane();
+    	root.setLeft(navBar);
+    	root.setCenter(newBox);
     	// Assignment Detail Input
-    	Label titleLabel = new Label("Assignment Title");
-        TextField assignTitle = new TextField("Assignment Title");
+    	Label titleLabel = new Label(aString);
+        TextField assignTitle = new TextField(aString);
         assignTitle.setMaxWidth(Double.MAX_VALUE);
         
-    	Label descLabel = new Label("Description");
+    	Label descLabel = new Label(desString);
 
-        TextField description = new TextField("Description");
+        TextField description = new TextField(desString);
         description.setMaxWidth(Double.MAX_VALUE);
 
-    	Label dueLabel = new Label("Due Date");
+    	Label dueLabel = new Label(dueString);
     	DatePicker dueDate = new DatePicker(); 
     	if(due != null)
     		dueDate.setValue(due);
@@ -286,7 +272,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         		description.getText(), dueDate.getValue().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")),
         		pSlide.getValue()));
         
-        Button cancelButton = new Button("Cancel");
+        Button cancelButton = new Button(cancelString);
         cancelButton.setMaxWidth(Double.MAX_VALUE);
         cancelButton.setOnAction(e -> window.setScene(home));
     	
@@ -299,13 +285,13 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         newBox.getChildren().addAll(header, titleLabel, assignTitle, descLabel, description, 
         		dueLabel, dueDate, priorityLabel, pSlide);
         newBox.getChildren().addAll(createButton, cancelButton);
-        
-        newBox.setPadding(new Insets(screenSize.getHeight()/2-200,0,0,screenSize.getWidth()/2-75));
-    	// Add Assignment Setup
+        newBox.setPadding(new Insets(screenSize.getHeight()/2-200,0,0,screenSize.getWidth()/2-200));
+    	
+        // Add Assignment Setup
         GridPane addAssign = new GridPane();
         addAssign.setVgap(8);
         addAssign.setHgap(10);
-        addAssign.getChildren().addAll(newBox, navBar);
+        addAssign.getChildren().addAll(root);
     	addAssignment = new Scene(addAssign, screenSize.getWidth(), screenSize.getHeight());
     }
     
@@ -370,13 +356,13 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     	double width = screenSize.getWidth();
     	
     	// User name Input
-        TextField userInput = new TextField("Username");
+        TextField userInput = new TextField(uString);
         userInput.setMaxWidth(Double.MAX_VALUE);
 
         // Password Input
-        TextField passInput = new TextField("Password");
+        TextField passInput = new TextField(pString);
         passInput.setMaxWidth(Double.MAX_VALUE);
-        
+            
         // Login Action
         Button loginButton = new Button("Log In");
         loginButton.setMaxWidth(Double.MAX_VALUE);
@@ -386,10 +372,15 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         Button signUpButton = new Button("Sign Up");
         signUpButton.setMaxWidth(Double.MAX_VALUE);
         signUpButton.setOnAction(e -> window.setScene(createUser));
+        
+        // Exit Button
+        Button exitButton = new Button("Exit PASTA");
+        exitButton.setMaxWidth(Double.MAX_VALUE);
+        exitButton.setOnAction(e ->  System.exit(0));
     	
         loginBox.setSpacing(10);
     	loginBox.setMaxWidth(loginWidth);
-        loginBox.getChildren().addAll(userInput, passInput, loginButton, signUpButton);
+        loginBox.getChildren().addAll(userInput, passInput, loginButton, signUpButton, exitButton);
         
         GridPane loginGrid = new GridPane();
         // Puts the login box in the middle-ish part of the screen
@@ -439,15 +430,15 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     	VBox navBar = navBarButtons();
     	
     	// Sign Up Input
-    	Label titleLabel = new Label("Assignment Title");
+    	Label titleLabel = new Label(aString);
         Label assignTitle = new Label(toView.getName());
         assignTitle.setMaxWidth(Double.MAX_VALUE);
         
-    	Label descLabel = new Label("Description");
+    	Label descLabel = new Label(desString);
         Label description = new Label(toView.description());
         description.setMaxWidth(Double.MAX_VALUE);
 
-    	Label dueLabel = new Label("Due Date");
+    	Label dueLabel = new Label(dueString);
     	
     	Label priorityLabel = new Label("Current Priority: " + toView.getPriority()); 
     	
@@ -507,16 +498,16 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     	VBox navBar = navBarButtons();
     	
     	// Assignment Detail Input
-    	Label titleLabel = new Label("Assignment Title");
+    	Label titleLabel = new Label(aString);
         TextField assignTitle = new TextField(a.getName());
         assignTitle.setMaxWidth(Double.MAX_VALUE);
         
-    	Label descLabel = new Label("Description");
+    	Label descLabel = new Label(desString);
 
         TextField description = new TextField(a.description());
         description.setMaxWidth(Double.MAX_VALUE);
 
-    	Label dueLabel = new Label("Due Date");
+    	Label dueLabel = new Label(dueString);
     	DatePicker dueDate = new DatePicker(); 
     	dueDate.setValue(LocalDate.now());
 
@@ -526,7 +517,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     	Slider pSlide = new Slider();
         pSlide.setMin(1);
         pSlide.setMax(10);
-        pSlide.setValue(a.getPriority());
+        pSlide.setValue(Double.parseDouble(a.getPriority()));
         pSlide.setShowTickLabels(true);
         pSlide.setShowTickMarks(true);
         pSlide.setMajorTickUnit(1);
@@ -545,7 +536,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         });
         		
         
-        Button cancelButton = new Button("Cancel");
+        Button cancelButton = new Button(cancelString);
         cancelButton.setMaxWidth(Double.MAX_VALUE);
         cancelButton.setOnAction(e -> window.setScene(viewAssignment));
     	

@@ -2,13 +2,8 @@ package logic;
 
 import java.util.Calendar;
 import java.time.LocalDate;
-
-import javafx.scene.control.Button;
-
-//import java.text.DateFormat;
-//import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+
 public class Assignment implements Comparable<Assignment>
 {
    private String name;
@@ -21,7 +16,6 @@ public class Assignment implements Comparable<Assignment>
    private long timeSpentOnAssignment;
    private long startWorkAssignmentTime;
    private double priority; 
-   private Button button;
    
    // Constructors
    public Assignment(String name, LocalDate due, long estTime, String desc)
@@ -40,10 +34,6 @@ public class Assignment implements Comparable<Assignment>
 	   description=d; 
 	   dueDate=du;
 	   priority=p; 
-	   button = new Button("Select");
-	   button.setOnAction(e -> Main.viewAssignmentScreen(this));
-       button.setMaxWidth(Double.MAX_VALUE);
-	   
    }
    
    public void updateAssignment(String n, String d, LocalDate du, double p)
@@ -57,7 +47,6 @@ public class Assignment implements Comparable<Assignment>
    @Override
    public int compareTo(Assignment a) 
    {
-	   System.out.println("Override ran");
 	   if(a.priority > priority)
 	   {
 		   return 1;
@@ -91,13 +80,11 @@ public class Assignment implements Comparable<Assignment>
    {
       return name;
    }
-   public Button getButton()
+
+   public String getPriority()
    {
-	   return button;
-   }
-   public double getPriority()
-   {
-	   return priority;
+	   Double p = new Double(priority);
+	   return p.toString();
    }
    public String getDue()
    {
