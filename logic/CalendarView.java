@@ -141,7 +141,7 @@ public class CalendarView {
 	                }
             	});
             	g.addRow(i++, ass);
-            }
+             }
             b.setCenter(g);
 
             hbox.getChildren().add(b);
