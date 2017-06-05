@@ -29,7 +29,8 @@ public class Assignment implements Comparable<Assignment>
       description = desc;
    }
    
-   public Assignment(String n, String d, LocalDate du, double p){
+   public Assignment(String n, String d, LocalDate du, double p)
+   {
 	   name=n;
 	   description=d; 
 	   dueDate=du;

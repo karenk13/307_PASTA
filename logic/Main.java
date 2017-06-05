@@ -26,14 +26,14 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     
     private static Button loginButton;
     
-    private static Scene login;
-    private static Scene home;
-    private static Scene createUser;
+    protected static Scene login;
+    protected static Scene home;
+    protected static Scene createUser;
     protected static Scene addAssignment;
-    private static Scene calendar;
-    private static Scene scratchpad;
-    private static Scene settings;
-    private static Scene viewAssignment;
+    protected static Scene calendar;
+    protected static Scene scratchpad;
+    protected static Scene settings;
+    protected static Scene viewAssignment;
     
     private static String pString = "Password";
     private static String uString = "Username";
@@ -46,13 +46,15 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     private static ArrayList<User> users;
     private static AssignmentManager aM; 
     
+    
+    
     @Override
     public  void start(Stage primaryStage) throws Exception{
         window = primaryStage;
         window.setTitle("PASTA");
         defaultUsers();
         aM = users.get(0).getAM();
-        
+       
         
         // Initialize Scenes
         loginScreen();
@@ -81,7 +83,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     	user = users.get(0);
     }
     
-    private static void currentAssignments()
+    protected static void currentAssignments()
     {
     	
     	 TableColumn<Assignment, String> assignCol = new TableColumn<Assignment, String>("Current Assignments"); 	 
@@ -119,7 +121,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
          assignmentManager.getColumns().addAll(assignCol);
          
     }
-    
+    /*
     private static VBox navBarButtons()
     {
     	int buttonWidth = 150;
@@ -169,6 +171,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     	navBar.getChildren().addAll(scratchpadButton, settingsButton,logoutButton, exitButton);	
     	return navBar;
     }
+    */
     
     private static void newUser()
     {
@@ -230,7 +233,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     protected static void addAssignmentScreen(LocalDate due)
     {
     	VBox newBox = new VBox();
-    	VBox navBar = navBarButtons();
+    	NavBar navBar = new NavBar();
     	BorderPane root = new BorderPane();
     	root.setLeft(navBar);
     	root.setCenter(newBox);
@@ -299,7 +302,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     {
     	CalendarView calendarView = new CalendarView(aM.getAssignments()) ;
 	
-    	VBox navBar = navBarButtons();
+    	NavBar navBar = new NavBar();
     	// Calendar Page Setup
         GridPane calendarGrid = new GridPane();
         calendarGrid.setPadding(new Insets(0,0,0,0));
@@ -314,7 +317,8 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     
     private static void assignmentScreen()
     {
-    	VBox navBar = navBarButtons();
+    	NavBar navBar = new NavBar();
+    	
         // Assignment View Setup
         GridPane assignmentView = new GridPane();
         assignmentView.setPadding(new Insets(0, 0, 0, 0));
@@ -326,7 +330,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
 
     private static void scratchScreen()
     {
-    	VBox navBar = navBarButtons();
+    	NavBar navBar = new NavBar();
     	 // Scratch pad Page Setup
         GridPane scratchpadGrid = new GridPane();
         scratchpadGrid.setPadding(new Insets(0,0,0,0));
@@ -338,7 +342,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     
     private static void settingsScreen()
     {
-    	VBox navBar = navBarButtons();
+    	NavBar navBar = new NavBar();
         GridPane settingsGrid = new GridPane();
         settingsGrid.setPadding(new Insets(0,0,0,0));
         settingsGrid.setVgap(8);
@@ -400,7 +404,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     	add.setOnAction(e -> window.setScene(addAssignment));
     	
        
-    	VBox navBar = navBarButtons();
+    	NavBar navBar = new NavBar();
     	
     	// The title text on top and its alignment
     	Label header = new Label("Welcome to Home, " + user.getName());
@@ -427,7 +431,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     {
     	
     	VBox newBox = new VBox();
-    	VBox navBar = navBarButtons();
+    	NavBar navBar = new NavBar();
     	
     	// Sign Up Input
     	Label titleLabel = new Label(aString);
@@ -495,7 +499,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     private static void editAssignment(Assignment a)
     {
     	VBox newBox = new VBox();
-    	VBox navBar = navBarButtons();
+    	NavBar navBar = new NavBar();
     	
     	// Assignment Detail Input
     	Label titleLabel = new Label(aString);
@@ -563,8 +567,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     private static void goToHome(Scene home)
     {
     	currentAssignments();
-    	window.setScene(home);
-    	
+    	window.setScene(home);	
     }
     
     
