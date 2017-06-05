@@ -3,11 +3,12 @@ package test;
 // Cole Grigbsy 
 
 import org.junit.Test;
+
+import logic.Assignment;
+
 import static org.junit.Assert.*;
 
 import java.time.LocalDate;
-
-import logic.*;
 
 public class TestAssignment {
 

@@ -44,7 +44,8 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     
     private static User user; 
     private static ArrayList<User> users;
-    private static AssignmentManager aM; 
+    private static AssignmentManager aM;
+    private static ScratchPadManager scratchManager;
     
     
     
@@ -86,7 +87,19 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     protected static void currentAssignments()
     {
     	
-    	 TableColumn<Assignment, String> assignCol = new TableColumn<Assignment, String>("Current Assignments"); 	 
+    	Assignment temp;
+    	Label name = new Label("Name");
+    	Label due = new Label("Due");
+    	Label priority = new Label("Priority");
+    	Label select = new Label("Select");
+    	 
+    	System.out.println("numAssignments: " + aM.numAssignments());
+    	 for(int i = 0; i < aM.numAssignments(); i++)
+    	 {
+    		temp = aM.getAssignment(i);
+    	 }
+    	 
+    	 TableColumn<Assignment, String> assignCol = new TableColumn<>("Current Assignments"); 	 
          assignCol.setMinWidth(screenSize.getWidth()/2-100);
          
          TableColumn<Assignment, String> nameCol = new TableColumn<> ("Name");
@@ -331,16 +344,28 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     private static void scratchScreen()
     {
     	NavBar navBar = new NavBar();
+    	TextArea textBox = new TextArea();
+        Button saveButton = new Button("Save Note");
     	 // Scratch pad Page Setup
         GridPane scratchpadGrid = new GridPane();
         scratchpadGrid.setPadding(new Insets(0,0,0,0));
         scratchpadGrid.setVgap(8);
         scratchpadGrid.setHgap(10);
         scratchpadGrid.getChildren().addAll(navBar);
+        scratchpadGrid.add(textBox, 1,0,1,1);
+        scratchpadGrid.add(saveButton, 1,1,1,1);
+        
+        saveButton.setOnAction(e -> saveNote(textBox.getText()));
     	scratchpad = new Scene(scratchpadGrid, screenSize.getWidth(), screenSize.getHeight());
     }
     
-    private static void settingsScreen()
+    private static void saveNote(String text) {
+    	//TODO Check if adding to notes correctly
+    	scratchManager.addNote(text);
+    	
+	}
+
+	private static void settingsScreen()
     {
     	NavBar navBar = new NavBar();
         GridPane settingsGrid = new GridPane();
@@ -478,7 +503,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     	viewAssignment = new Scene(addAssign, screenSize.getWidth(), screenSize.getHeight());
     	window.setScene(viewAssignment);
     }
-
+    
     public static void main(String[] args) {
         launch(args);
     }
