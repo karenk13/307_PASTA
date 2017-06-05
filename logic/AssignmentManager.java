@@ -50,10 +50,14 @@ public class AssignmentManager {
 	   assignments.remove(a);
 	}
 	
-	protected ObservableList<Assignment> addAssignment(String name, String description, String due, 
+	public ObservableList<Assignment> addAssignment(String name, String description, String due, 
 			double priority){
-		assignments.add(new Assignment(name, description, LocalDate.parse(due,
+		return addAssignment(new Assignment(name, description, LocalDate.parse(due,
 				DateTimeFormatter.ofPattern("MM/dd/yyyy")) , priority));
+	}
+	
+	public ObservableList<Assignment> addAssignment(Assignment a){
+		assignments.add(a);
 		return assignments;
 	}
 	

@@ -16,7 +16,7 @@ public class User {
 		aM = new AssignmentManager(); 
 	}
 	
-	protected String getName(){
+	public String getName(){
 		return name;
 	}
 	

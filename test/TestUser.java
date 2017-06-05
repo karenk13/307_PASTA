@@ -12,7 +12,7 @@ public class TestUser {
 		User t = new User("Cole", "Password");
 		t.setPassword("BetterPW123");
 		boolean expected = true; 
-		boolean result = t.getPassword().equals("BetterPW123");
+		boolean result = "BetterPW123".equals(t.getPassword());
 		
 		assertEquals(expected, result);
 		
@@ -21,7 +21,7 @@ public class TestUser {
 	@Test public void testGetName(){
 		User t = new User("Cole", "Password");
 		boolean expected = true; 
-		boolean result = t.getName().equals("Cole");
+		boolean result = "Cole".equals(t.getName());
 		
 		assertEquals(expected, result);
 		

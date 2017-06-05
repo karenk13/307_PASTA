@@ -84,8 +84,7 @@ public class Assignment implements Comparable<Assignment>
 
    public String getPriority()
    {
-	   Double p = new Double(priority);
-	   return p.toString();
+	   return Double.toString(priority);
    }
    public String getDue()
    {
