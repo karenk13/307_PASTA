@@ -14,8 +14,8 @@ public class TestAssignmentManager {
 	@Test public void testNumAssignments(){
 		AssignmentManager aM = new AssignmentManager();
 		aM.addAssignment("Test1", "Desc", "6/7/2017", 10);
-		aM.addAssignment("Test2", "Desc", "6/7/2017", 10);
-		aM.addAssignment("Test3", "Desc", "6/7/2017", 10);
+		aM.addAssignment("Test2", "Desc", "6/12/2017", 10);
+		aM.addAssignment("Test3", "Desc", "6/27/2017", 10);
 
 		int expected = 3;
 		int result = aM.numAssignments();
@@ -29,8 +29,8 @@ public class TestAssignmentManager {
 		AssignmentManager aM = new AssignmentManager();
 		Assignment a = new Assignment("Test1", "Desc", LocalDate.now(), 10);
 		aM.addAssignment(a);
-		aM.addAssignment("Test2", "Desc", "6/7/2017", 10);
-		aM.addAssignment("Test3", "Desc", "6/7/2017", 10);
+		aM.addAssignment("Test2", "Desc", "6/13/2017", 10);
+		aM.addAssignment("Test3", "Desc", "6/19/2017", 10);
 		
 		int expected = 2; 
 		aM.deleteAssignment(a);
