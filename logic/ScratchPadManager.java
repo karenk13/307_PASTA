@@ -29,7 +29,8 @@ public class ScratchPadManager {
 		return notes.get(index);
 	}
 	
-	protected ObservableList<String> addNote(String note){
+	
+	public ObservableList<String> addNote(String note){
 		notes.add(note);
 		return notes;
 	}

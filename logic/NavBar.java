@@ -12,10 +12,7 @@ public class NavBar extends VBox
     	
     	// Logout Button
         Button logoutButton = new Button("Log Out");
-        logoutButton.setOnAction(e -> 
-        {
-        	Main.window.setScene(Main.login);
-        });
+        logoutButton.setOnAction(e -> Main.window.setScene(Main.login));
         logoutButton.setMaxWidth(Double.MAX_VALUE);
     	
     	// Home Back Button
@@ -29,42 +26,27 @@ public class NavBar extends VBox
 
     	// Add Calendar
         Button calendarButton = new Button("Calendar");
-        calendarButton.setOnAction(e -> 
-        {
-        	Main.window.setScene(Main.calendar);  
-        });
+        calendarButton.setOnAction(e -> Main.window.setScene(Main.calendar));
         calendarButton.setMaxWidth(Double.MAX_VALUE);
         
         // Add Assignment
         Button assignmentButton = new Button("New Assign");
-        assignmentButton.setOnAction(e -> 
-        {
-        	Main.window.setScene(Main.addAssignment);
-        });
+        assignmentButton.setOnAction(e ->Main.window.setScene(Main.addAssignment));
         assignmentButton.setMaxWidth(Double.MAX_VALUE);
 
         //Add Scratch pad
         Button scratchpadButton = new Button("Scratchpad");
-        scratchpadButton.setOnAction(e -> 
-        {
-        	Main.window.setScene(Main.scratchpad);	
-        });
+        scratchpadButton.setOnAction(e -> Main.window.setScene(Main.scratchpad));
         scratchpadButton.setMaxWidth(Double.MAX_VALUE);
 
         // Add Settings
         Button settingsButton = new Button("Settings");
-        settingsButton.setOnAction(e ->
-        {
-        	Main.window.setScene(Main.settings);
-        });
+        settingsButton.setOnAction(e ->Main.window.setScene(Main.settings));
         settingsButton.setMaxWidth(Double.MAX_VALUE);
         
         // Add Exit
         Button exitButton = new Button("Exit PASTA");
-        exitButton.setOnAction(e -> 
-        {
-        	System.exit(0);
-        });
+        exitButton.setOnAction(e -> System.exit(0));
         exitButton.setMaxWidth(Double.MAX_VALUE);
         
         // Populating the nav bar

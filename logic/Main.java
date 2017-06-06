@@ -86,18 +86,6 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     
     protected static void currentAssignments()
     {
-    	
-    	Assignment temp;
-    	Label name = new Label("Name");
-    	Label due = new Label("Due");
-    	Label priority = new Label("Priority");
-    	Label select = new Label("Select");
-    	 
-    	System.out.println("numAssignments: " + aM.numAssignments());
-    	 for(int i = 0; i < aM.numAssignments(); i++)
-    	 {
-    		temp = aM.getAssignment(i);
-    	 }
     	 
     	 TableColumn<Assignment, String> assignCol = new TableColumn<>("Current Assignments"); 	 
          assignCol.setMinWidth(screenSize.getWidth()/2-100);
