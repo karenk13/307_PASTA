@@ -41,7 +41,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     
     protected static User user; 
     protected static ArrayList<User> users;
-    private static AssignmentManager aM;
+    protected static AssignmentManager aM;
     private static ScratchPadManager scratchManager;
       
     @Override
@@ -59,10 +59,8 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         calendarScreen();
         addAssignmentScreen();
         newUser();
-     
         window.setScene(login);
         window.show();
-
     }
     
     private static void defaultUsers()
@@ -264,10 +262,6 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     	addAssignmentScreen();
     	window.setScene(home);
     }
-    private static void logout(Scene login)
-    {
-    	window.setScene(login);
-    }
     
     protected static void editAssignment(Assignment a)
     {
@@ -286,14 +280,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         		screenSize.getHeight());
     	window.setScene(editAssignment);
     }
-    
-    private static void goToHome(Scene home)
-    {
-    	currentAssignments();
-    	window.setScene(home);	
-    }
-    
-    
+      
     protected static void deleteAssignment(Assignment a)
     {
     	aM.deleteAssignment(a);
@@ -321,7 +308,6 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     	}
     }
     
-
     @Override
     public void handle(ActionEvent event) {
         if(event.getSource() == loginButton)
@@ -329,6 +315,4 @@ public class Main extends Application implements EventHandler<ActionEvent>{
             System.out.println("Button1");
         }
     }
-    
-
 }

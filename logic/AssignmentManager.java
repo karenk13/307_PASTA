@@ -6,19 +6,30 @@ import java.util.Collections;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.Node;
+import javafx.scene.layout.BorderPane;
 
 public class AssignmentManager {
 	
 	private ObservableList<Assignment> assignments; 
 	private ObservableList<Assignment> completeAssignments;
 	
-	public AssignmentManager(){
+	public AssignmentManager()
+	{
 		assignments = FXCollections.observableArrayList();
 		completeAssignments = FXCollections.observableArrayList();
 	}
 	
 	protected ObservableList<Assignment> getAssignments() {
 		return assignments; 
+	}
+	
+	public void printList()
+	{
+		for(int i = 0; i < assignments.size(); i++)
+		{
+			System.out.print(assignments.get(i).getName());
+		}
 	}
 	
 	protected ObservableList<Assignment> getComplete() {
