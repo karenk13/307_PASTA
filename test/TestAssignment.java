@@ -7,6 +7,7 @@ import org.junit.Test;
 import logic.Assignment;
 
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDate;
 
