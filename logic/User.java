@@ -5,6 +5,7 @@ public class User {
 	private String name;
 	private String password;
 	private AssignmentManager aM; 
+	private ScratchPadManager sM;
 	
 	public User() {
 		this("No", "password");
@@ -14,6 +15,7 @@ public class User {
 		this.name= name;
 		this.password=password; 
 		aM = new AssignmentManager(); 
+		sM = new ScratchPadManager();
 	}
 	
 	public String getName(){
@@ -31,6 +33,10 @@ public class User {
 	
 	public AssignmentManager getAM() {
 		return aM; 
+	}
+	
+	public ScratchPadManager getSM() {
+		return sM;
 	}
 	
 }

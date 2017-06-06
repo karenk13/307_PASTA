@@ -162,14 +162,9 @@ public class Assignment implements Comparable<Assignment>
       timeSpentOnAssignment += Math.abs(startWorkAssignmentTime - cal.getTimeInMillis());
    }
 
-
    @Override
    public String toString()
    {
       return createDate.toString();
    }
-
-
-
-
 }

@@ -19,6 +19,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
 
     static Stage window;
     static TableView<Assignment> assignmentManager;
+    static TableView<String> scratchPadManager;
     protected static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     
     private static Button loginButton;
@@ -42,7 +43,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     protected static User user; 
     protected static ArrayList<User> users;
     protected static AssignmentManager aM;
-    private static ScratchPadManager scratchManager;
+    private static ScratchPadManager sM;
       
     @Override
     public  void start(Stage primaryStage) throws Exception{
@@ -50,6 +51,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         window.setTitle("PASTA");
         defaultUsers();
         aM = users.get(0).getAM();
+        sM = users.get(0).getSM();
        
         // Initialize Scenes
         loginScreen();
@@ -113,6 +115,18 @@ public class Main extends Application implements EventHandler<ActionEvent>{
          
     }
     
+    protected static void currentNotes() {
+    	scratchPadManager = new TableView<>();
+    	
+    	TableColumn<String, String> notesCol = new TableColumn<>("Notes");
+        notesCol.setMinWidth(screenSize.getWidth()/2-100);
+    	
+    	scratchPadManager.fixedCellSizeProperty();
+    	scratchPadManager.setMinHeight(screenSize.getHeight() - 50);
+    	scratchPadManager.setItems(sM.getNotes());
+    	scratchPadManager.getColumns().addAll(notesCol);
+    }
+    
     private static void newUser()
     {
     	NewUserView newUserView = new NewUserView();
@@ -171,7 +185,8 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     	NavBar navBar = new NavBar();
     	TextArea textBox = new TextArea();
         Button saveButton = new Button("Save Note");
-    	 // Scratch pad Page Setup
+        
+    	// Scratch pad Page Setup
         GridPane scratchpadGrid = new GridPane();
         scratchpadGrid.setPadding(new Insets(0,0,0,0));
         scratchpadGrid.setVgap(8);
@@ -185,10 +200,9 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     }
     
     private static void saveNote(String text) {
-    	//TODO Check if adding to notes correctly
-    	scratchManager.addNote(text);
-    	
-	}
+    	sM.addNote(text);
+    	currentNotes();
+    }
 
 	private static void settingsScreen()
     {
@@ -301,6 +315,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
 			{
     			user = a;
     			aM = user.getAM(); 
+    			sM = user.getSM();
     			currentAssignments();
     			homeScreen();
     			window.setScene(home);
