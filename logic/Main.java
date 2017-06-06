@@ -5,10 +5,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import javafx.application.Application;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -26,9 +24,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     static TableView<Assignment> assignmentManager;
     static TableView<String> scratchPadManager;
     protected static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-    
-    private static Button loginButton;
-    
+        
     protected static Scene login;
     protected static Scene home;
     protected static Scene createUser;
@@ -53,10 +49,10 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     protected static AssignmentManager aM;
     private static ScratchPadManager sM;
       
-    @Override
-    public  void start(Stage primaryStage) throws Exception{
-        window = primaryStage;
-        window.setTitle("PASTA");
+    
+    private static void setup(Stage prim, String sheet){
+    	window=prim;
+    	window.setTitle("PASTA");
         defaultUsers();
         aM = users.get(0).getAM();
         sM = users.get(0).getSM();
@@ -73,9 +69,15 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         emailSettingsScreen();
         passSettingsScreen();
 
-        login.getStylesheets().add(getClass().getResource("theme.css").toExternalForm());
+        login.getStylesheets().add(sheet);
         window.setScene(login);
         window.show();
+    }
+    
+    @Override
+    public void start(Stage primaryStage) throws Exception{
+    	String styleSheet = getClass().getResource("theme.css").toExternalForm(); 
+    	setup(primaryStage, styleSheet);
     }
     
     private static void defaultUsers()
@@ -103,7 +105,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
          dueCol.setCellValueFactory(new PropertyValueFactory<Assignment, String>("due"));
          dueCol.setMinWidth(200);
          
-         TableColumn<Assignment, String> pCol = new TableColumn<Assignment, String> ("Priority");
+         TableColumn<Assignment, String> pCol = new TableColumn<> ("Priority");
          pCol.setCellValueFactory(new PropertyValueFactory<Assignment, String>("priority"));
          pCol.setMinWidth(200);
             
@@ -171,16 +173,9 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     {
     	NewUserView newUserView = new NewUserView();
     	
-    	// Add Assignment Setup
-        GridPane assignGrid = new GridPane();
-        assignGrid.setPadding(new Insets(0,0,0,0));
-        assignGrid.setVgap(8);
-        assignGrid.setHgap(10);
-		
-		BorderPane root = new BorderPane();
-		root.setCenter(newUserView.getView());
-        assignGrid.getChildren().addAll(root);
-        createUser = new Scene(assignGrid, screenSize.getWidth(), screenSize.getHeight());
+    	GridPane assignmentGrid = gridSetup(newUserView.getView());
+
+        createUser = new Scene(assignmentGrid, screenSize.getWidth(), screenSize.getHeight());
     }
     
     private static void addAssignmentScreen(){
@@ -191,15 +186,8 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     {
     	AddAssignmentView addView = new AddAssignmentView(due);
     	
-    	// Add Assignment Setup
-        GridPane assignGrid = new GridPane();
-        assignGrid.setPadding(new Insets(0,0,0,0));
-        assignGrid.setVgap(8);
-        assignGrid.setHgap(10);
-		
-		BorderPane root = new BorderPane();
-		root.setCenter(addView.getView());
-        assignGrid.getChildren().addAll(root);
+        GridPane assignGrid = gridSetup(addView.getView());
+
         addAssignment = new Scene(assignGrid, screenSize.getWidth(), screenSize.getHeight());
     }
     
@@ -209,10 +197,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
 	
     	NavBar navBar = new NavBar();
     	// Calendar Page Setup
-        GridPane calendarGrid = new GridPane();
-        calendarGrid.setPadding(new Insets(0,0,0,0));
-        calendarGrid.setVgap(8);
-        calendarGrid.setHgap(10);
+        GridPane calendarGrid = grid();
 		
 		BorderPane root = new BorderPane(calendarView.getView(), null, null, null, navBar);
         calendarGrid.getChildren().addAll(root);
@@ -227,23 +212,18 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         Button saveButton = new Button("Save Note");
         
     	// Scratch pad Page Setup
-        GridPane scratchpadGrid = new GridPane();
-        scratchpadGrid.setPadding(new Insets(0,0,0,0));
-        scratchpadGrid.setVgap(8);
-        scratchpadGrid.setHgap(10);
+        GridPane scratchpadGrid = grid();
         scratchpadGrid.getChildren().addAll(navBar);
         scratchpadGrid.add(textBox, 1,0,1,1);
         scratchpadGrid.add(saveButton, 1,1,1,1);
         
-        saveButton.setOnAction(e -> saveNote(textBox.getText()));
+        saveButton.setOnAction(e -> {
+        	sM.addNote(textBox.getText());
+        	currentNotes();	
+        });
     	scratchpad = new Scene(scratchpadGrid, screenSize.getWidth(), screenSize.getHeight());
     }
 
-    // Settings
-    private static void saveNote(String text) {
-    	sM.addNote(text);
-    	currentNotes();
-    }
 
 	private static void settingsScreen()
     {
@@ -266,15 +246,9 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     	LoginView loginView = new LoginView();
 
     	
-    	GridPane loginGrid = new GridPane();
-        loginGrid.setPadding(new Insets(0,0,0,0));
-        loginGrid.setVgap(8);
-        loginGrid.setHgap(10);
- 		
- 		BorderPane root = new BorderPane();
- 		root.setCenter(loginView.getView());
-
-        loginGrid.getChildren().addAll(root);
+    	GridPane loginGrid = gridSetup(loginView.getView());
+        
+        
         login = new Scene(loginGrid, screenSize.getWidth(), screenSize.getHeight());
     }
 
@@ -283,15 +257,27 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     {
     	HomeView homeView = new HomeView();
     	
-    	GridPane homeGrid = new GridPane();
-        homeGrid.setPadding(new Insets(0,0,0,0));
-        homeGrid.setVgap(8);
-        homeGrid.setHgap(10);
+    	GridPane homeGrid = gridSetup(homeView.getView());
+
+        home = new Scene(homeGrid, screenSize.getWidth(), screenSize.getHeight());
+    }
+    
+    private static GridPane grid(){
+    	GridPane grid = new GridPane();
+        grid.setPadding(new Insets(0,0,0,0));
+        grid.setVgap(8);
+        grid.setHgap(10);
+        return grid; 
+    }
+    
+    private static GridPane gridSetup(Node v){
+
+    	GridPane grid = grid();
  		
  		BorderPane root = new BorderPane();
- 		root.setCenter(homeView.getView());
-        homeGrid.getChildren().addAll(root);
-        home = new Scene(homeGrid, screenSize.getWidth(), screenSize.getHeight());
+ 		root.setCenter(v);
+        grid.getChildren().addAll(root);
+        return grid;
     }
     
     // View Assignment Screen
@@ -299,14 +285,8 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     {
     	AssignmentView assignmentView = new AssignmentView(toView);
     	
-    	GridPane assignmentGrid = new GridPane();
-        assignmentGrid.setPadding(new Insets(0,0,0,0));
-        assignmentGrid.setVgap(8);
-        assignmentGrid.setHgap(10);
- 		
- 		BorderPane root = new BorderPane();
- 		root.setCenter(assignmentView.getView());
-        assignmentGrid.getChildren().addAll(root);
+    	GridPane assignmentGrid = gridSetup(assignmentView.getView());
+    	
         viewAssignment = new Scene(assignmentGrid, screenSize.getWidth(), screenSize.getHeight());
     	window.setScene(viewAssignment);
     }
@@ -329,14 +309,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     {
     	EditView editView = new EditView(a);
 
-    	GridPane assignmentGrid = new GridPane();
-        assignmentGrid.setPadding(new Insets(0,0,0,0));
-        assignmentGrid.setVgap(8);
-        assignmentGrid.setHgap(10);
- 		
- 		BorderPane root = new BorderPane();
- 		root.setCenter(editView.getView());
-        assignmentGrid.getChildren().addAll(root);
+    	GridPane assignmentGrid = gridSetup(editView.getView());
         
         Scene editAssignment = new Scene(assignmentGrid, screenSize.getWidth(),
         		screenSize.getHeight());
@@ -369,15 +342,9 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         TextField lastInput = new TextField("");
         lastInput.setMaxWidth(buttonWidth);
 
-        Button saveButton = new Button("Save");
-        saveButton.setMaxWidth(buttonWidth);
+        Button saveButton = saveB(buttonWidth);
 
-        saveButton.setOnAction(e -> window.setScene(settings));
-
-        Button backButton = new Button("Back");
-        backButton.setMaxWidth(buttonWidth);
-
-        backButton.setOnAction((e) -> window.setScene(settings));
+        Button backButton = backB(buttonWidth); 
         accountBox.setSpacing(10);
         accountBox.getChildren().addAll(userLabel, userInput, firstLabel, firstInput, lastLabel, lastInput, saveButton, backButton);
 
@@ -408,21 +375,13 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         TextField newEmailInput = new TextField("");
         newEmailInput.setMaxWidth(buttonWidth);
 
-        Label confirmLabel = new Label();
-        confirmLabel.setText("Confirm New Email: ");
+        Label confirmLabel = confirmL("Confirm New Email: ");
 
-        TextField confirmInput = new TextField("");
-        confirmInput.setMaxWidth(buttonWidth);
+        TextField confirmInput = confirmT(buttonWidth);
 
-        Button saveButton = new Button("Save");
-        saveButton.setMaxWidth(buttonWidth);
-
-        saveButton.setOnAction(e -> window.setScene(settings));
-
-        Button backButton = new Button("Back");
-        backButton.setMaxWidth(buttonWidth);
-
-        backButton.setOnAction(e-> window.setScene(settings));
+        Button saveButton = saveB(buttonWidth);
+        
+        Button backButton = backB(buttonWidth);
 
         emailBox.setSpacing(10);
         emailBox.getChildren().addAll(emailLabel, emailInput, newEmailLabel, newEmailInput, confirmLabel, confirmInput, saveButton, backButton);
@@ -454,20 +413,13 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         TextField newPassInput = new TextField("");
         newPassInput.setMaxWidth(buttonWidth);
 
-        Label confirmLabel = new Label();
-        confirmLabel.setText("Confirm New Password: ");
+        Label confirmLabel = confirmL("Confirm New Password: ");
 
-        TextField confirmInput = new TextField("");
-        confirmInput.setMaxWidth(buttonWidth);
+        TextField confirmInput = confirmT(buttonWidth);
 
-        Button saveButton = new Button("Save");
-        saveButton.setMaxWidth(buttonWidth);
-
-        saveButton.setOnAction(e -> window.setScene(settings));
-        Button backButton = new Button("Back");
-
-        backButton.setMaxWidth(buttonWidth);
-        backButton.setOnAction(e -> window.setScene(settings));
+        Button saveButton = saveB(buttonWidth);
+        
+        Button backButton = backB(buttonWidth);
 
         passBox.setSpacing(10);
         passBox.getChildren().addAll(passLabel, passInput, newPassLabel, newPassInput, confirmLabel, confirmInput, saveButton, backButton);
@@ -477,6 +429,39 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         root.setCenter(passBox);
         passBox.setPadding(new Insets(height / 2 - 100, width / 2 - 175, height / 2, width / 2 - 275));
         password = new Scene(root, width, height);
+    }
+    
+    private static Label confirmL(String c) {
+    	Label confirmLabel = new Label();
+        confirmLabel.setText(c);
+        return confirmLabel;
+    }
+    
+    private static TextField confirmT(double buttonWidth){
+    	
+    
+        TextField confirmInput = new TextField("");
+        confirmInput.setMaxWidth(buttonWidth);
+        return confirmInput;
+
+    }
+    
+    private static Button saveB(double buttonWidth) {
+    	
+        Button saveButton = new Button("Save");
+        saveButton.setMaxWidth(buttonWidth);
+        saveButton.setOnAction(e -> window.setScene(settings));
+
+        return saveButton;
+        
+
+    }
+    private static Button backB(double buttonWidth){
+        Button backButton = new Button("Back");
+
+        backButton.setMaxWidth(buttonWidth);
+        backButton.setOnAction(e -> window.setScene(settings));
+        return backButton;
     }
       
     protected static void deleteAssignment(Assignment a)
@@ -506,12 +491,9 @@ public class Main extends Application implements EventHandler<ActionEvent>{
 			}
     	}
     }
-    
-    @Override
-    public void handle(ActionEvent event) {
-        if(event.getSource() == loginButton)
-        {
-            System.out.println("Button1");
-        }
-    }
+	@Override
+	public void handle(ActionEvent event) {
+		handle(event);
+	}
 }
+

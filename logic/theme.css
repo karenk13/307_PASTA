@@ -1,3 +1,17 @@
 .root {
     -fx-background-color: #1C637A;
 }
+
+.a-header {
+	-fx-alignment: center ;
+	-fx-font-size: 20pt ;
+	-fx-font-weight: bold ;
+  
+}
+
+.a-label {
+	-fx-alignment: center ;
+	-fx-font-size: 12pt ;
+	-fx-font-weight: bold ;
+  
+}

@@ -18,7 +18,7 @@ public class Assignment implements Comparable<Assignment>
    private double priority; 
    
    // Constructors
-   public Assignment(String name, LocalDate due, long estTime, String desc)
+   public Assignment(String name, String desc, LocalDate due)
    {
 	  this.name=name;
       createDate = Calendar.getInstance();
@@ -35,6 +35,9 @@ public class Assignment implements Comparable<Assignment>
 	   description=d; 
 	   dueDate=du;
 	   priority=p; 
+	   activeAssignment = false;
+	   timeSpentOnAssignment = 0;
+	   complete=false;
    }
    
    public void updateAssignment(String n, String d, LocalDate du, double p)

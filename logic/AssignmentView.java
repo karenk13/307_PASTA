@@ -15,22 +15,34 @@ public class AssignmentView
 	
 	public AssignmentView(Assignment toView)
     {
+
 		VBox newBox = new VBox();
     	NavBar navBar = new NavBar();
     	
+    	String labelCSS = "a-label";
+    	
     	// Sign Up Input
-    	Label titleLabel = new Label(Main.aString);
+    	Label titleLabel = new Label(Main.aString + ":");
+    	titleLabel.getStyleClass().add(labelCSS);
+    	
         Label assignTitle = new Label(toView.getName());
         assignTitle.setMaxWidth(Double.MAX_VALUE);
         
-    	Label descLabel = new Label(Main.desString);
+    	Label descLabel = new Label(Main.desString + ":");
+    	descLabel.getStyleClass().add(labelCSS);
+
         Label description = new Label(toView.description());
         description.setMaxWidth(Double.MAX_VALUE);
 
-    	Label dueLabel = new Label(Main.dueString);
+    	Label dueLabel = new Label(Main.dueString+":");
+    	dueLabel.getStyleClass().add(labelCSS);
+
+    	Label due = new Label(toView.getDue());
+    	due.setMaxWidth(Double.MAX_VALUE);
     	
     	Label priorityLabel = new Label("Current Priority: " + toView.getPriority()); 
-    	
+    	priorityLabel.getStyleClass().add(labelCSS);
+
 
         Button editButton = new Button("Modify Assignment");
         editButton.setMaxWidth(Double.MAX_VALUE);
@@ -46,12 +58,13 @@ public class AssignmentView
         
         // The title text on top and its alignment
     	Label header = new Label("View Assignment");
+    	header.getStyleClass().add("a-header");
         header.setMaxWidth(Double.MAX_VALUE);
         header.setAlignment(Pos.CENTER);
         
         newBox.setSpacing(10);
         newBox.getChildren().addAll(header, titleLabel, assignTitle, descLabel, description, 
-        		dueLabel, priorityLabel);
+        		dueLabel, due, priorityLabel);
         newBox.getChildren().addAll(editButton, completeButton, deleteButton);  
         newBox.setPadding(new Insets(Main.screenSize.getHeight()/2-200,0,0,Main.screenSize.getWidth()/2-75));
     
@@ -61,6 +74,7 @@ public class AssignmentView
         addAssign.setHgap(10);
         addAssign.getChildren().addAll(newBox, navBar);
         view = new BorderPane();
+        view.getStylesheets().add(getClass().getResource("theme.css").toExternalForm());
         view.setCenter(addAssign);
     }
 	

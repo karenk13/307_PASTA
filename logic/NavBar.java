@@ -34,15 +34,7 @@ public class NavBar extends VBox
         assignmentButton.setOnAction(e ->Main.window.setScene(Main.addAssignment));
         assignmentButton.setMaxWidth(Double.MAX_VALUE);
         
-        // Add Sort
-        Button sortButton = new Button("Sort");
-        sortButton.setOnAction(e -> 
-        {
-        	Main.aM.getAssignmentsPriority();
-        	Main.currentAssignments();
-        	//Main.aM.printList();
-        });
-        sortButton.setMaxWidth(Double.MAX_VALUE);
+      
 
         //Add Scratch pad
         Button scratchpadButton = new Button("Scratchpad");
@@ -63,7 +55,7 @@ public class NavBar extends VBox
         this.setSpacing(10);
     	this.setMaxWidth(buttonWidth);
     	this.setPadding(new Insets(20,20,10,10));
-    	this.getChildren().addAll(homeButton, calendarButton, assignmentButton, sortButton);
+    	this.getChildren().addAll(homeButton, calendarButton, assignmentButton);
     	this.getChildren().addAll(scratchpadButton, settingsButton,logoutButton, exitButton);	
 	}	
 }

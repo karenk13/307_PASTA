@@ -6,8 +6,6 @@ import java.util.Collections;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.Node;
-import javafx.scene.layout.BorderPane;
 
 public class AssignmentManager {
 	
@@ -24,12 +22,14 @@ public class AssignmentManager {
 		return assignments; 
 	}
 	
-	public void printList()
+	public String printList()
 	{
+		StringBuilder s = new StringBuilder();
 		for(int i = 0; i < assignments.size(); i++)
 		{
-			System.out.print(assignments.get(i).getName());
+			s.append(assignments.get(i).getName() + "\n");
 		}
+		return s.toString();
 	}
 	
 	protected ObservableList<Assignment> getComplete() {
