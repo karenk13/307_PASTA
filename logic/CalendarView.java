@@ -124,37 +124,58 @@ public class CalendarView {
         for (LocalDate date = firstDisplayedDate ; ! date.isAfter(lastDisplayedDate) ; date = date.plusDays(1)) {
             Label label = new Label(String.valueOf(date.getDayOfMonth()));
             label.getStyleClass().add("calendar-cell");
+            
+            final LocalDate dt = date;  
+            label.setOnMouseClicked(new EventHandler<MouseEvent>()
+            {
+                @Override
+                public void handle(MouseEvent t) {
+                	
+                    Main.addAssignmentScreen(dt); 
+                    Main.window.setScene(Main.addAssignment);
+                }
+            });
             final HBox hbox = new HBox();
             hbox.setMinSize(100,100);
             BorderPane b = new BorderPane(); 
             b.setTop(label);
             GridPane g = new GridPane();
             int i = 0;
+            boolean hasAssignments = false;
             // get a list of assignments due on each day 
             for (Assignment a: AssignmentManager.getAssignmentsOnDate(assignments, date)){
+            	hasAssignments=true;
             	Label ass = new Label(a.getName());
             	ass.setOnMouseClicked(new EventHandler<MouseEvent>()
             	{
 	                @Override
 	                public void handle(MouseEvent t) {	                	
 	                    // VIEW ASSIGNEMT 
+	                	Main.viewAssignmentScreen(a);
+	                    Main.window.setScene(Main.viewAssignment);
+
 	                }
             	});
             	g.addRow(i++, ass);
              }
             b.setCenter(g);
+            
+            
+            if (!hasAssignments){
+                hbox.setOnMouseClicked(new EventHandler<MouseEvent>()
+                {
+                    @Override
+                    public void handle(MouseEvent t) {
+                    	
+                        Main.addAssignmentScreen(dt); 
+                        Main.window.setScene(Main.addAssignment);
+                    }
+                });
+            }
 
             hbox.getChildren().add(b);
             hbox.setStyle("-fx-border-color: black;");
-            final LocalDate dt = date;  
-            hbox.setOnMouseClicked(new EventHandler<MouseEvent>()
-            {
-                @Override
-                public void handle(MouseEvent t) {
-                    Main.addAssignmentScreen(dt); 
-                    Main.window.setScene(Main.addAssignment);
-                }
-            });
+           
             label.pseudoClassStateChanged(beforeMonth, date.isBefore(first));
             label.pseudoClassStateChanged(afterMonth, date.isAfter(last));
 
