@@ -1,5 +1,7 @@
 package logic;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -38,11 +40,13 @@ public class LoginView
         imageBox.setPadding(new Insets(-300,0,0,-130));
 
     	// User name Input
-        TextField userInput = new TextField(Main.uString);
+        TextField userInput = new TextField("");
+        userInput.setPromptText("Username");
         userInput.setMaxWidth(Double.MAX_VALUE);
 
         // Password Input
-        TextField passInput = new TextField(Main.pString);
+        TextField passInput = new TextField("");
+        passInput.setPromptText("Password");
         passInput.setMaxWidth(Double.MAX_VALUE);
             
         // Login Action
@@ -63,6 +67,13 @@ public class LoginView
         loginBox.setSpacing(10);
     	loginBox.setMaxWidth(loginWidth);
         loginBox.getChildren().addAll(userInput, passInput, loginButton, signUpButton, exitButton);
+        final BooleanProperty firstTime = new SimpleBooleanProperty(true); 
+        userInput.focusedProperty().addListener((observable,  oldValue,  newValue) -> {
+            if(newValue && firstTime.get()){
+                loginBox.requestFocus(); 
+                firstTime.setValue(false); 
+            }
+        });
         
         GridPane loginGrid = new GridPane();
         // Puts the login box in the middle-ish part of the screen
@@ -74,6 +85,8 @@ public class LoginView
     }
     public Node getView()
     {
+        //view.getStylesheets().add(getClass().getResource("theme.css").toExternalForm());
+
     	return view;
     }
 }

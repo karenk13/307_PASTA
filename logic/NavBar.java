@@ -8,6 +8,7 @@ public class NavBar extends VBox
 {
 	public NavBar()
 	{
+
 		int buttonWidth = 150;
     	
     	// Logout Button
@@ -57,5 +58,7 @@ public class NavBar extends VBox
     	this.setPadding(new Insets(20,20,10,10));
     	this.getChildren().addAll(homeButton, calendarButton, assignmentButton);
     	this.getChildren().addAll(scratchpadButton, settingsButton,logoutButton, exitButton);	
+        this.getStylesheets().add(getClass().getResource("theme.css").toExternalForm());
+        this.getStyleClass().add("root");
 	}	
 }

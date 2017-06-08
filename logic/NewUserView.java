@@ -1,5 +1,7 @@
 package logic;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -26,19 +28,24 @@ public class NewUserView
         newUse.setHgap(10);
     	
     	// Sign Up Input
-        TextField fNameInput = new TextField("First Name");
+        TextField fNameInput = new TextField();
+        fNameInput.setPromptText("First Name");
         fNameInput.setMaxWidth(Double.MAX_VALUE);
         
-        TextField lNameInput = new TextField("Last Name");
+        TextField lNameInput = new TextField("");
+        lNameInput.setPromptText("Last Name");
         lNameInput.setMaxWidth(Double.MAX_VALUE);
 
-        TextField userSignUpInput = new TextField(Main.uString);
+        TextField userSignUpInput = new TextField("");
+        userSignUpInput.setPromptText("Username");
         userSignUpInput.setMaxWidth(Double.MAX_VALUE);
 
-        TextField passSignUpInput = new TextField(Main.pString);
+        TextField passSignUpInput = new TextField("");
+        passSignUpInput.setPromptText("Password");
         passSignUpInput.setMaxWidth(Double.MAX_VALUE);
 
-        TextField confirmPassInput = new TextField("Confirm Password");
+        TextField confirmPassInput = new TextField("");
+        confirmPassInput.setPromptText("Confirm Password");
         confirmPassInput.setMaxWidth(Double.MAX_VALUE);
 
         Button createSignUpButton = new Button("Create Account");
@@ -62,11 +69,21 @@ public class NewUserView
         newUse.getChildren().addAll(newUserBox);
         // Puts the login box in the middle-ish part of the screen
         newUse.setPadding(new Insets(height/2-100, width/2-100, height/2, width/2-75));
+        
+        final BooleanProperty firstTime = new SimpleBooleanProperty(true); 
+        fNameInput.focusedProperty().addListener((observable,  oldValue,  newValue) -> {
+            if(newValue && firstTime.get()){
+                newUserBox.requestFocus(); 
+                firstTime.setValue(false); 
+            }
+        });
+        
         view = new BorderPane();
         view.setCenter(newUse);
 	}
 	public Node getView()
 	{
+        view.getStylesheets().add(getClass().getResource("theme.css").toExternalForm());
 		return view;   
 	}
 }

@@ -26,23 +26,26 @@ public class AddAssignmentView
     	root.setLeft(navBar);
     	root.setCenter(newBox);
     	// Assignment Detail Input
-    	Label titleLabel = new Label(Main.aString);
-        TextField assignTitle = new TextField(Main.aString);
+        TextField assignTitle = new TextField("");
+        assignTitle.setPromptText("Assignment Title");
         assignTitle.setMaxWidth(Double.MAX_VALUE);
         
-    	Label descLabel = new Label(Main.desString);
 
-        TextField description = new TextField(Main.desString);
+        TextField description = new TextField("");
+        description.setPromptText("Description");
         description.setMaxWidth(Double.MAX_VALUE);
 
-    	Label dueLabel = new Label(Main.dueString);
+    	//Label dueLabel = new Label(Main.dueString);
     	DatePicker dueDate = new DatePicker(); 
     	if(due != null)
     		dueDate.setValue(due);
     	else 
     		dueDate.setValue(LocalDate.now());
+    	dueDate.setPromptText("Due Date");
+    	
+    	Label priorityLabel = new Label("Priority (1-10)");      
+    	priorityLabel.getStyleClass().add("a-label");
 
-    	Label priorityLabel = new Label("Priority (1-10)");        
     	
     	// Create a slider to get a number value
     	Slider pSlide = new Slider();
@@ -71,10 +74,9 @@ public class AddAssignmentView
     	Label header = new Label("Add Assignment");
         header.setMaxWidth(Double.MAX_VALUE);
         header.setAlignment(Pos.CENTER);
-        
+    	header.getStyleClass().add("a-header");
         newBox.setSpacing(10);
-        newBox.getChildren().addAll(header, titleLabel, assignTitle, descLabel, description, 
-        		dueLabel, dueDate, priorityLabel, pSlide);
+        newBox.getChildren().addAll(header, assignTitle, description, dueDate, priorityLabel, pSlide);
         newBox.getChildren().addAll(createButton, cancelButton);
         newBox.setPadding(new Insets(Main.screenSize.getHeight()/2-200,0,0,Main.screenSize.getWidth()/2-200));
     	
@@ -83,11 +85,13 @@ public class AddAssignmentView
         addAssign.setVgap(8);
         addAssign.setHgap(10);
         addAssign.getChildren().addAll(root);
+
         view = root;
 	}
 	
 	public Node getView()
 	{
+        view.getStylesheets().add(getClass().getResource("theme.css").toExternalForm());
 		return view;
 	}
 }

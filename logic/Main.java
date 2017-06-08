@@ -6,6 +6,10 @@ import java.util.ArrayList;
 
 import javafx.application.Application;
 import javafx.scene.layout.VBox;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.event.ActionEvent;
@@ -48,9 +52,11 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     protected static ArrayList<User> users;
     protected static AssignmentManager aM;
     private static ScratchPadManager sM;
+    static String s; 
       
     
     private static void setup(Stage prim, String sheet){
+    	s= sheet;
     	window=prim;
     	window.setTitle("PASTA");
         defaultUsers();
@@ -59,6 +65,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
        
         // Initialize Scenes
         loginScreen();
+        homeScreen();
         settingsScreen();
         currentAssignments();
         scratchScreen();
@@ -70,6 +77,17 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         passSettingsScreen();
 
         login.getStylesheets().add(sheet);
+        home.getStylesheets().add(sheet);
+        createUser.getStylesheets().add(sheet);
+        addAssignment.getStylesheets().add(sheet);
+        calendar.getStylesheets().add(sheet);
+        scratchpad.getStylesheets().add(sheet);
+        settings.getStylesheets().add(sheet);
+        account.getStylesheets().add(sheet);
+        email.getStylesheets().add(sheet);
+        password.getStylesheets().add(sheet);
+       
+
         window.setScene(login);
         window.show();
     }
@@ -127,6 +145,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
          
          assignmentManager.setItems(aM.getAssignments());
          assignmentManager.getColumns().addAll(assignCol);
+
          
     }
 
@@ -178,17 +197,19 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         createUser = new Scene(assignmentGrid, screenSize.getWidth(), screenSize.getHeight());
     }
     
+    
     private static void addAssignmentScreen(){
     	addAssignmentScreen(null);
     }
     
     protected static void addAssignmentScreen(LocalDate due)
     {
-    	AddAssignmentView addView = new AddAssignmentView(due);
+		AddAssignmentView addView = new AddAssignmentView(due);
     	
         GridPane assignGrid = gridSetup(addView.getView());
 
         addAssignment = new Scene(assignGrid, screenSize.getWidth(), screenSize.getHeight());
+		addAssignment.getStylesheets().add(s);
     }
     
     private static void calendarScreen()
@@ -260,6 +281,8 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     	GridPane homeGrid = gridSetup(homeView.getView());
 
         home = new Scene(homeGrid, screenSize.getWidth(), screenSize.getHeight());
+		home.getStylesheets().add(s);
+
     }
     
     private static GridPane grid(){
@@ -288,7 +311,9 @@ public class Main extends Application implements EventHandler<ActionEvent>{
     	GridPane assignmentGrid = gridSetup(assignmentView.getView());
     	
         viewAssignment = new Scene(assignmentGrid, screenSize.getWidth(), screenSize.getHeight());
+		viewAssignment.getStylesheets().add(s);
     	window.setScene(viewAssignment);
+
     }
     
 
@@ -313,6 +338,8 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         
         Scene editAssignment = new Scene(assignmentGrid, screenSize.getWidth(),
         		screenSize.getHeight());
+		editAssignment.getStylesheets().add(s);
+
     	window.setScene(editAssignment);
     }
 
@@ -324,30 +351,32 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         double height = screenSize.getHeight();
         double width = screenSize.getWidth();
 
-        Label userLabel = new Label();
-        userLabel.setText("New Username: ");
-
         TextField userInput = new TextField("");
+        userInput.setPromptText("New Username");
         userInput.setMaxWidth(buttonWidth);
 
-        Label firstLabel = new Label();
-        firstLabel.setText("First Name: ");
-
         TextField firstInput = new TextField("");
+        firstInput.setPromptText("New First Name");
         firstInput.setMaxWidth(buttonWidth);
 
-        Label lastLabel = new Label();
-        lastLabel.setText("Last Name: ");
-
         TextField lastInput = new TextField("");
+        lastInput.setPromptText("New Last Name");
         lastInput.setMaxWidth(buttonWidth);
 
         Button saveButton = saveB(buttonWidth);
 
         Button backButton = backB(buttonWidth); 
         accountBox.setSpacing(10);
-        accountBox.getChildren().addAll(userLabel, userInput, firstLabel, firstInput, lastLabel, lastInput, saveButton, backButton);
+        accountBox.getChildren().addAll(userInput, firstInput, lastInput, saveButton, backButton);
 
+        final BooleanProperty firstTime = new SimpleBooleanProperty(true); 
+        userInput.focusedProperty().addListener((observable,  oldValue,  newValue) -> {
+            if(newValue && firstTime.get()){
+                accountBox.requestFocus(); 
+                firstTime.setValue(false); 
+            }
+        });
+        
         BorderPane root = new BorderPane();
 
         root.setLeft(navBar);
@@ -364,28 +393,36 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         double height = screenSize.getHeight();
         double width = screenSize.getWidth();
 
-        Label emailLabel = new Label();
-        emailLabel.setText("Enter Current Email: ");
-
         TextField emailInput = new TextField("");
-
-        Label newEmailLabel = new Label();
-        newEmailLabel.setText("Enter New Email: ");
+        emailInput.setPromptText("Current Email");
+        emailInput.setMaxWidth(buttonWidth);
 
         TextField newEmailInput = new TextField("");
+        newEmailInput.setPromptText("New Email");
         newEmailInput.setMaxWidth(buttonWidth);
 
         Label confirmLabel = confirmL("Confirm New Email: ");
 
         TextField confirmInput = confirmT(buttonWidth);
+        confirmInput.setPromptText("Confirm New Email");
+        confirmInput.setMaxWidth(buttonWidth);
+
 
         Button saveButton = saveB(buttonWidth);
         
         Button backButton = backB(buttonWidth);
 
         emailBox.setSpacing(10);
-        emailBox.getChildren().addAll(emailLabel, emailInput, newEmailLabel, newEmailInput, confirmLabel, confirmInput, saveButton, backButton);
+        emailBox.getChildren().addAll(emailInput, newEmailInput, confirmInput, saveButton, backButton);
 
+        final BooleanProperty firstTime = new SimpleBooleanProperty(true); 
+        emailInput.focusedProperty().addListener((observable,  oldValue,  newValue) -> {
+            if(newValue && firstTime.get()){
+                emailBox.requestFocus(); 
+                firstTime.setValue(false); 
+            }
+        });
+        
         BorderPane root = new BorderPane();
         root.setLeft(navBar);
         root.setCenter(emailBox);
@@ -401,16 +438,12 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         double height = screenSize.getHeight();
         double width = screenSize.getWidth();
 
-        Label passLabel = new Label();
-        passLabel.setText("Enter Current Password: ");
-
         TextField passInput = new TextField("");
+        passInput.setPromptText("Current Password");
         passInput.setMaxWidth(buttonWidth);
-
-        Label newPassLabel = new Label();
-        newPassLabel.setText("Enter New Password: ");
-
+        
         TextField newPassInput = new TextField("");
+        newPassInput.setPromptText("New Password");
         newPassInput.setMaxWidth(buttonWidth);
 
         Label confirmLabel = confirmL("Confirm New Password: ");
@@ -422,8 +455,16 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         Button backButton = backB(buttonWidth);
 
         passBox.setSpacing(10);
-        passBox.getChildren().addAll(passLabel, passInput, newPassLabel, newPassInput, confirmLabel, confirmInput, saveButton, backButton);
+        passBox.getChildren().addAll(passInput, newPassInput, confirmInput, saveButton, backButton);
 
+        final BooleanProperty firstTime = new SimpleBooleanProperty(true); 
+        passInput.focusedProperty().addListener((observable,  oldValue,  newValue) -> {
+            if(newValue && firstTime.get()){
+                passBox.requestFocus(); 
+                firstTime.setValue(false); 
+            }
+        });
+        
         BorderPane root = new BorderPane();
         root.setLeft(navBar);
         root.setCenter(passBox);

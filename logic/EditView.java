@@ -3,6 +3,10 @@ package logic;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import com.sun.prism.paint.Color;
+
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -25,20 +29,21 @@ public class EditView
     	NavBar navBar = new NavBar();
     	
     	// Assignment Detail Input
-    	Label titleLabel = new Label(Main.aString);
         TextField assignTitle = new TextField(a.getName());
+        assignTitle.setPromptText("Assignment Title");
         assignTitle.setMaxWidth(Double.MAX_VALUE);
         
-    	Label descLabel = new Label(Main.desString);
 
         TextField description = new TextField(a.description());
+        description.setPromptText("Description");
         description.setMaxWidth(Double.MAX_VALUE);
 
-    	Label dueLabel = new Label(Main.dueString);
     	DatePicker dueDate = new DatePicker(); 
     	dueDate.setValue(LocalDate.now());
 
-    	Label priorityLabel = new Label("Priority (1-10)");        
+    	Label priorityLabel = new Label("Priority (1-10)"); 
+    	priorityLabel.getStyleClass().add("a-label");
+
     	
     	// Create a slider to get a number value
     	Slider pSlide = new Slider();
@@ -73,22 +78,37 @@ public class EditView
         header.setAlignment(Pos.CENTER);
         
         newBox.setSpacing(10);
-        newBox.getChildren().addAll(header, titleLabel, assignTitle, descLabel, description, 
-        		dueLabel, dueDate, priorityLabel, pSlide);
+        newBox.setAlignment(Pos.CENTER);
+        newBox.getChildren().addAll(header, assignTitle, description, 
+        	 dueDate, priorityLabel, pSlide);
         newBox.getChildren().addAll(saveButton, cancelButton);
         
         newBox.setPadding(new Insets(Main.screenSize.getHeight()/2-200,0,0,Main.screenSize.getWidth()/2-75));
     	// Add Assignment Setup
         GridPane addAssign = new GridPane();
-        addAssign.setVgap(8);
-        addAssign.setHgap(10);
+        addAssign.setVgap(80);
+        addAssign.setHgap(100);
         addAssign.getChildren().addAll(newBox, navBar);
+        newBox.getStylesheets().add(getClass().getResource("theme.css").toExternalForm());
+        
+        final BooleanProperty firstTime = new SimpleBooleanProperty(true); 
+        assignTitle.focusedProperty().addListener((observable,  oldValue,  newValue) -> {
+            if(newValue && firstTime.get()){
+                assignTitle.requestFocus(); 
+                firstTime.setValue(false); 
+            }
+        });
+        
+    	header.getStyleClass().add("a-header");
         view = new BorderPane();
         view.setCenter(addAssign);
+        
 	}
 	
 	public Node getView()
 	{
+	    view.getStylesheets().add(getClass().getResource("theme.css").toExternalForm());
+	    view.getStyleClass().add("root");
 		return view;   
 	}
 }

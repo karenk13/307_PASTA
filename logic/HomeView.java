@@ -1,5 +1,6 @@
 package logic;
 
+import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -14,6 +15,7 @@ public class HomeView
 	
 	public HomeView()
     {
+
 	   NavBar navBar = new NavBar();
 	   double buttonWidth = 150;
 	   Button add = new Button("New Assignment");
@@ -29,14 +31,23 @@ public class HomeView
        homeGrid.setPadding(new Insets(0, 0, 0, 0));
        homeGrid.setVgap(8);
        homeGrid.setHgap(10);
+       homeGrid.getStylesheets().add(getClass().getResource("theme.css").toExternalForm());
+       homeGrid.getStyleClass().add("root");
+
+       
        BorderPane root = new BorderPane();
        root.setLeft(navBar);
        root.setCenter(Main.assignmentManager);
+       root.getStylesheets().add(getClass().getResource("theme.css").toExternalForm());
+       root.getStyleClass().add("root");
+
        homeGrid.getChildren().addAll(root);
        view = root;
    }
    public Node getView()
    {
-   		return view;
+       view.getStylesheets().add(getClass().getResource("theme.css").toExternalForm());
+       view.getStyleClass().add("root");
+       return view;
    }
 }

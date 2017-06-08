@@ -39,7 +39,7 @@ public class CalendarView {
         view.getStyleClass().add("calendar");
         calendar = new GridPane();
         calendar.getStyleClass().add("calendar-grid");
-
+        
         Label header = new Label();
         header.setMaxWidth(Double.MAX_VALUE);
         header.getStyleClass().add("calendar-header");
@@ -117,7 +117,8 @@ public class CalendarView {
         LocalDate last = month.get().atEndOfMonth() ;
         int dayOfWeekOfLast = last.get(weekFields.dayOfWeek());
         LocalDate lastDisplayedDate = last.plusDays(7 - (long)dayOfWeekOfLast);
-        
+
+    
         PseudoClass beforeMonth = PseudoClass.getPseudoClass("before-display-month");
         PseudoClass afterMonth = PseudoClass.getPseudoClass("after-display-month");
                 
@@ -146,12 +147,14 @@ public class CalendarView {
             for (Assignment a: AssignmentManager.getAssignmentsOnDate(assignments, date)){
             	hasAssignments=true;
             	Label ass = new Label(a.getName());
+            	ass.setStyle("-fx-text-fill: white;");
             	ass.setOnMouseClicked(new EventHandler<MouseEvent>()
             	{
 	                @Override
 	                public void handle(MouseEvent t) {	                	
 	                    // VIEW ASSIGNEMT 
 	                	Main.viewAssignmentScreen(a);
+	                	Main.viewAssignment.getStylesheets().add(getClass().getResource("theme.css").toExternalForm());
 	                    Main.window.setScene(Main.viewAssignment);
 
 	                }
@@ -174,7 +177,7 @@ public class CalendarView {
             }
 
             hbox.getChildren().add(b);
-            hbox.setStyle("-fx-border-color: black;");
+            hbox.setStyle("-fx-border-color: white;");
            
             label.pseudoClassStateChanged(beforeMonth, date.isBefore(first));
             label.pseudoClassStateChanged(afterMonth, date.isAfter(last));
@@ -191,6 +194,8 @@ public class CalendarView {
     
 
     public Node getView() {
+        view.getStylesheets().add(getClass().getResource("theme.css").toExternalForm());
+        
         return view ;
     }
 
