@@ -3,7 +3,6 @@ package logic;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-import com.sun.prism.paint.Color;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;

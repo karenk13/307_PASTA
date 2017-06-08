@@ -35,7 +35,6 @@ public class AddAssignmentView
         description.setPromptText("Description");
         description.setMaxWidth(Double.MAX_VALUE);
 
-    	//Label dueLabel = new Label(Main.dueString);
     	DatePicker dueDate = new DatePicker(); 
     	if(due != null)
     		dueDate.setValue(due);

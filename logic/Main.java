@@ -8,8 +8,6 @@ import javafx.application.Application;
 import javafx.scene.layout.VBox;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.event.ActionEvent;
@@ -401,7 +399,6 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         newEmailInput.setPromptText("New Email");
         newEmailInput.setMaxWidth(buttonWidth);
 
-        Label confirmLabel = confirmL("Confirm New Email: ");
 
         TextField confirmInput = confirmT(buttonWidth);
         confirmInput.setPromptText("Confirm New Email");
@@ -446,8 +443,6 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         newPassInput.setPromptText("New Password");
         newPassInput.setMaxWidth(buttonWidth);
 
-        Label confirmLabel = confirmL("Confirm New Password: ");
-
         TextField confirmInput = confirmT(buttonWidth);
 
         Button saveButton = saveB(buttonWidth);
@@ -472,12 +467,7 @@ public class Main extends Application implements EventHandler<ActionEvent>{
         password = new Scene(root, width, height);
     }
     
-    private static Label confirmL(String c) {
-    	Label confirmLabel = new Label();
-        confirmLabel.setText(c);
-        return confirmLabel;
-    }
-    
+
     private static TextField confirmT(double buttonWidth){
     	
     

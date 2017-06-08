@@ -85,8 +85,6 @@ public class LoginView
     }
     public Node getView()
     {
-        //view.getStylesheets().add(getClass().getResource("theme.css").toExternalForm());
-
     	return view;
     }
 }
