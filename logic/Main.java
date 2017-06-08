@@ -115,11 +115,11 @@ public class Main extends Application implements EventHandler<ActionEvent>{
          
          TableColumn<Assignment, String> nameCol = new TableColumn<> ("Name");
          nameCol.setCellValueFactory(new PropertyValueFactory<Assignment, String>("name"));
-         nameCol.setMinWidth(250);
+         nameCol.setMinWidth(200);
          
          TableColumn<Assignment, String> dueCol = new TableColumn<> ("Due");
          dueCol.setCellValueFactory(new PropertyValueFactory<Assignment, String>("due"));
-         dueCol.setMinWidth(200);
+         dueCol.setMinWidth(300);
          
          TableColumn<Assignment, String> pCol = new TableColumn<> ("Priority");
          pCol.setCellValueFactory(new PropertyValueFactory<Assignment, String>("priority"));

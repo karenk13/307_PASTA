@@ -52,13 +52,14 @@ public class AddAssignmentView
         pSlide.setMax(10);
         pSlide.setValue(5);
         pSlide.setShowTickLabels(true);
+        pSlide.getStyleClass().add("slider");
         pSlide.setShowTickMarks(true);
         pSlide.setMajorTickUnit(1);
         pSlide.setMinorTickCount(0);
         pSlide.setSnapToTicks(true);
         pSlide.setMaxWidth(Double.MAX_VALUE);
+        
       
-
         Button createButton = new Button("Create Assignment");
         createButton.setMaxWidth(Double.MAX_VALUE);
         createButton.setOnAction(e -> Main.createAssignment(assignTitle.getText(),
