@@ -6,7 +6,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 
 @Suite.SuiteClasses({TestAssignment.class, TestUser.class, TestAssignmentManager.class,
-	TestSettings.class, TestScratchPadManager.class, TestCourse.class})
+	TestSettings.class, TestScratchPadManager.class, TestCourse.class, TestAssignmentManagerLoops.class})
 
 public class TestSuite {
 	

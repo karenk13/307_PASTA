@@ -72,7 +72,7 @@ public class AssignmentManager {
 		return assignments;
 	}
 	
-	protected static ObservableList<Assignment> getAssignmentsOnDate(ObservableList<Assignment> l, 
+	public static ObservableList<Assignment> getAssignmentsOnDate(ObservableList<Assignment> l, 
 			LocalDate date){
 		ObservableList<Assignment> a = FXCollections.observableArrayList(); 
 		
@@ -85,6 +85,20 @@ public class AssignmentManager {
 		return a;
 		
 	}
+	
+	public ObservableList<Assignment> searchAssignments(String name){
+		ObservableList<Assignment> a = FXCollections.observableArrayList(); 
+		
+		for (Assignment i: assignments){
+			if (name.equals(i.getName())) {
+				a.add(i);
+			}
+		}
+		
+		return a;
+		
+	}
+	
 	
 	public void getAssignmentsPriority()
 	{
